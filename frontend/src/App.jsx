@@ -16,16 +16,6 @@ import {
   ChevronRight,
 } from 'lucide-react'
 
-function InstagramIcon(props) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-    </svg>
-  )
-}
-
 function FacebookIcon(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -74,7 +64,7 @@ const translations = {
       slides: [
         {
           eyebrow: 'PIZZA, PASSIONE, FAMIGLIA',
-          title: 'Neapel auf dem Teller.',
+          title: 'Steinofen Pizza.',
           copy: 'Von Hand gezogener Teig, San-Marzano-Tomaten und ein bisschen Luigi-Magie.',
         },
         {
@@ -186,7 +176,7 @@ const translations = {
       slides: [
         {
           eyebrow: 'PIZZA, PASSIONE, FAMIGLIA',
-          title: 'Naples on a plate.',
+          title: 'Stone Oven Pizza.',
           copy: 'Hand-stretched dough, San Marzano tomatoes, and a little bit of Luigi magic.',
         },
         {
@@ -440,7 +430,7 @@ function App() {
                 <span className="h-px w-10 bg-[#f6c453]" />
                 {activeSlide.eyebrow}
               </p>
-              <h1 className="font-oswald text-4xl font-bold uppercase leading-[.95] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
+              <h1 className="font-oswald text-3xl font-bold uppercase leading-[.95] tracking-tight sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
                 {activeSlide.title}
               </h1>
               <p className="mt-5 max-w-lg text-base leading-relaxed text-[#fff8e9]/85 sm:mt-7 sm:text-lg">{activeSlide.copy}</p>
@@ -498,7 +488,7 @@ function App() {
             </div>
             <div>
               <p className="mb-5 text-xs font-bold uppercase tracking-[.25em] text-[#d73532]">{t.about.eyebrow}</p>
-              <h2 className="font-oswald text-4xl font-bold uppercase leading-[.95] text-[#173b28] sm:text-6xl lg:text-7xl">
+              <h2 className="font-oswald text-3xl font-bold uppercase leading-[.95] text-[#173b28] sm:text-4xl lg:text-5xl">
                 {t.about.heading1}
                 <br />
                 <span className="text-[#d73532]">{t.about.heading2}</span>
@@ -522,7 +512,7 @@ function App() {
             <div className="mb-12 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
               <div>
                 <p className="mb-4 text-xs font-bold uppercase tracking-[.25em] text-[#f6c453]">{t.gallery.eyebrow}</p>
-                <h2 className="font-oswald text-4xl font-bold uppercase leading-none sm:text-6xl lg:text-8xl">
+                <h2 className="font-oswald text-3xl font-bold uppercase leading-none sm:text-4xl lg:text-6xl">
                   {t.gallery.heading1}
                   <br />
                   {t.gallery.heading2}
@@ -576,7 +566,7 @@ function App() {
 
         <section className="bg-[#f6c453] px-5 py-20 lg:px-10 lg:py-24">
           <div className="mx-auto max-w-7xl">
-            <p className="mb-12 text-center font-oswald text-3xl font-bold uppercase text-[#173b28] sm:text-4xl lg:text-5xl">
+            <p className="mb-12 text-center font-oswald text-2xl font-bold uppercase text-[#173b28] sm:text-3xl lg:text-4xl">
               {t.why.heading1} <span className="text-[#d73532]">{t.why.heading2}</span>
             </p>
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
@@ -609,7 +599,7 @@ function App() {
             <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
               <div>
                 <p className="mb-4 text-xs font-bold uppercase tracking-[.25em] text-[#d73532]">{t.testimonials.eyebrow}</p>
-                <h2 className="font-oswald text-4xl font-bold uppercase leading-none text-[#173b28] sm:text-6xl lg:text-8xl">
+                <h2 className="font-oswald text-3xl font-bold uppercase leading-none text-[#173b28] sm:text-4xl lg:text-6xl">
                   {t.testimonials.heading1}
                   <br />
                   <span className="text-[#d73532]">{t.testimonials.heading2}</span>
@@ -645,7 +635,7 @@ function App() {
             <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
               <div>
                 <p className="mb-4 text-xs font-bold uppercase tracking-[.25em] text-[#f6c453]">{t.contact.eyebrow}</p>
-                <h2 className="font-oswald text-4xl font-bold uppercase leading-[.95] sm:text-6xl lg:text-8xl">
+                <h2 className="font-oswald text-3xl font-bold uppercase leading-[.95] sm:text-4xl lg:text-6xl">
                   {t.contact.heading1}
                   <br />
                   {t.contact.heading2}
@@ -752,10 +742,13 @@ function App() {
           </div>
           <div className="flex flex-wrap items-center gap-3 sm:justify-end">
             <LanguageSwitch lang={lang} setLang={setLang} />
-            <a aria-label="Instagram" href="#home" className="rounded-full border border-white/30 p-3 hover:border-[#f6c453]">
-              <InstagramIcon width={17} height={17} />
-            </a>
-            <a aria-label="Facebook" href="#home" className="rounded-full border border-white/30 p-3 hover:border-[#f6c453]">
+            <a
+              aria-label="Facebook"
+              href="https://www.facebook.com/pizzeriadaluigiregensburg/"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-full border border-white/30 p-3 hover:border-[#f6c453]"
+            >
               <FacebookIcon width={17} height={17} />
             </a>
             <a aria-label="Email" href={`mailto:${t.contact.email}`} className="rounded-full border border-white/30 p-3 hover:border-[#f6c453]">
