@@ -1,8 +1,10 @@
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   ArrowRight,
   Check,
+  ChevronLeft,
+  ChevronRight,
   Clock3,
   Flame,
   Mail,
@@ -12,8 +14,6 @@ import {
   Star,
   Truck,
   X,
-  ChevronLeft,
-  ChevronRight,
 } from 'lucide-react'
 
 function FacebookIcon(props) {
@@ -29,6 +29,8 @@ import hero1 from './assets/hero1.png'
 import hero2 from './assets/hero2.png'
 import aboutImg from './assets/ourplace/image.png'
 
+// Award images - user will place award 1.png and award 2.png in assets folder
+const awardGlob = import.meta.glob('./assets/award*.{png,jpg,jpeg,webp,PNG,JPG}', { eager: true, import: 'default' })
 const pizzaGlob = import.meta.glob('./assets/pizza/*.{png,jpg,jpeg,webp}', { eager: true, import: 'default' })
 const foodGlob = import.meta.glob('./assets/food/*.{png,jpg,jpeg,webp}', { eager: true, import: 'default' })
 const placeGlob = import.meta.glob('./assets/ourplace/*.{png,jpg,jpeg,webp}', { eager: true, import: 'default' })
@@ -39,6 +41,10 @@ function buildGalleryItems(glob) {
     .map(([, src]) => src)
 }
 
+const awardImages = Object.entries(awardGlob)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([, src]) => src)
+
 const galleryData = {
   pizza: buildGalleryItems(pizzaGlob),
   food: buildGalleryItems(foodGlob),
@@ -46,10 +52,7 @@ const galleryData = {
 }
 
 const ORDER_URL = 'https://order.pizzeriadaluigiregensburg.de/'
-
 const heroImages = [hero1, hero2]
-const TESTIMONIAL_COUNT = 6
-
 const whyIcons = [Flame, Check, Truck, Star]
 
 const translations = {
@@ -103,20 +106,28 @@ const translations = {
         { title: 'Familienrezept', copy: 'Die Sauce ist von Nonna. Das Geheimnis? Verraten wir nicht.' },
       ],
     },
+    awards: {
+      eyebrow: 'AUSGEZEICHNETE QUALITÄT',
+      heading1: 'UNSERE',
+      heading2: 'AUSZEICHNUNGEN',
+      copy: 'Wir sind stolz darauf, für unsere Qualität, unseren Service und unsere Leidenschaft ausgezeichnet zu werden.',
+      items: [
+        { year: '2024', title: 'BESTE PIZZERIA', subtitle: 'REGENSBURG', copy: 'Ausgezeichnet für hervorragende Qualität, authentischen Geschmack und exzellenten Service.' },
+        { year: '2025', title: 'KUNDENLIEBLING', subtitle: 'REGENSBURG', copy: 'Von unseren Kunden gewählt – danke für Ihr Vertrauen und Ihre Unterstützung!' },
+      ],
+    },
     testimonials: {
       eyebrow: 'Die Leute reden',
       heading1: 'Grazie',
       heading2: 'mille.',
       items: [
         {
-          quote:
-            'Ich habe eine köstliche Pizza und vegetarische Kartoffeln bei Pizzeria Da Luigi bestellt. Die Pizza war perfekt gebacken und hat hervorragend geschmeckt. Auch die vegetarischen Kartoffeln waren sehr gut. Der Service war freundlich und aufmerksam.',
+          quote: 'Ich habe eine köstliche Pizza und vegetarische Kartoffeln bei Pizzeria Da Luigi bestellt. Die Pizza war perfekt gebacken und hat hervorragend geschmeckt. Auch die vegetarischen Kartoffeln waren sehr gut. Der Service war freundlich und aufmerksam.',
           name: 'Kaderimsensin',
           role: 'Local Guide · 52 Bewertungen',
         },
         {
-          quote:
-            'Ich bin seit über zwei Jahren Kunde, und es wird Zeit für eine Bewertung. Die Lieferung war bisher immer sehr schnell und zuverlässig! Ob Pizza oder Pasta – das Essen kommt immer heiß und lecker an.',
+          quote: 'Ich bin seit über zwei Jahren Kunde, und es wird Zeit für eine Bewertung. Die Lieferung war bisher immer sehr schnell und zuverlässig! Ob Pizza oder Pasta – das Essen kommt immer heiß und lecker an.',
           name: 'Nikolas Lustig',
           role: 'Local Guide · 14 Bewertungen',
         },
@@ -215,20 +226,28 @@ const translations = {
         { title: 'Family recipe', copy: "The sauce is Nonna's. The secret? We're not telling." },
       ],
     },
+    awards: {
+      eyebrow: 'OUTSTANDING QUALITY',
+      heading1: 'OUR',
+      heading2: 'AWARDS',
+      copy: 'We are proud to be recognized for our quality, our service, and our passion for authentic Italian cuisine.',
+      items: [
+        { year: '2024', title: 'BEST PIZZERIA', subtitle: 'REGENSBURG', copy: 'Awarded for outstanding quality, authentic taste, and excellent service.' },
+        { year: '2025', title: 'CUSTOMER FAVOURITE', subtitle: 'REGENSBURG', copy: 'Chosen by our customers – thank you for your trust and support!' },
+      ],
+    },
     testimonials: {
       eyebrow: 'People are talking',
       heading1: 'Grazie',
       heading2: 'mille.',
       items: [
         {
-          quote:
-            'I ordered a delicious pizza and vegetarian potatoes from Pizzeria Da Luigi. The pizza was perfectly baked and tasted great. The vegetarian potatoes were also very good and offered a nice change. The service was friendly and attentive.',
+          quote: 'I ordered a delicious pizza and vegetarian potatoes from Pizzeria Da Luigi. The pizza was perfectly baked and tasted great. The vegetarian potatoes were also very good. The service was friendly and attentive.',
           name: 'Kaderimsensin',
           role: 'Local Guide · 52 reviews',
         },
         {
-          quote:
-            "I've been a customer for over two years now, and it's about time I left a review. So far, deliveries have always been very quick and reliable! The food, whether pizza or pasta, always arrives hot and delicious.",
+          quote: "I've been a customer for over two years now, and it's about time I left a review. So far, deliveries have always been very quick and reliable! The food, whether pizza or pasta, always arrives hot and delicious.",
           name: 'Nikolas Lustig',
           role: 'Local Guide · 14 reviews',
         },
@@ -279,9 +298,40 @@ const translations = {
   },
 }
 
-function LanguageSwitch({ lang, setLang, compact }) {
+/* ─── Trophy SVG (fallback if no award images) ─── */
+function TrophySVG() {
   return (
-    <div className={`flex items-center rounded-full border border-white/30 p-1 text-[11px] font-bold uppercase tracking-widest ${compact ? '' : ''}`}>
+    <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-24 h-24 mx-auto drop-shadow-lg">
+      {/* Laurel left */}
+      <ellipse cx="22" cy="55" rx="10" ry="5" fill="#c9a227" opacity=".7" transform="rotate(-30 22 55)" />
+      <ellipse cx="15" cy="45" rx="9" ry="5" fill="#c9a227" opacity=".6" transform="rotate(-50 15 45)" />
+      <ellipse cx="14" cy="65" rx="9" ry="5" fill="#c9a227" opacity=".6" transform="rotate(-10 14 65)" />
+      {/* Laurel right */}
+      <ellipse cx="98" cy="55" rx="10" ry="5" fill="#c9a227" opacity=".7" transform="rotate(30 98 55)" />
+      <ellipse cx="105" cy="45" rx="9" ry="5" fill="#c9a227" opacity=".6" transform="rotate(50 105 45)" />
+      <ellipse cx="106" cy="65" rx="9" ry="5" fill="#c9a227" opacity=".6" transform="rotate(10 106 65)" />
+      {/* Cup */}
+      <path d="M40 20 h40 v30 a20 20 0 0 1-40 0 Z" fill="url(#tg)" />
+      <rect x="52" y="70" width="16" height="14" fill="#c9a227" />
+      <rect x="42" y="84" width="36" height="6" rx="3" fill="#b8860b" />
+      {/* Handles */}
+      <path d="M40 28 Q24 28 24 42 Q24 56 40 56" stroke="#c9a227" strokeWidth="5" fill="none" strokeLinecap="round" />
+      <path d="M80 28 Q96 28 96 42 Q96 56 80 56" stroke="#c9a227" strokeWidth="5" fill="none" strokeLinecap="round" />
+      {/* Star */}
+      <polygon points="60,25 63,34 72,34 65,40 68,49 60,43 52,49 55,40 48,34 57,34" fill="#fff8e9" opacity=".9" />
+      <defs>
+        <linearGradient id="tg" x1="40" y1="20" x2="80" y2="70" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#f6c453" />
+          <stop offset="100%" stopColor="#c9a227" />
+        </linearGradient>
+      </defs>
+    </svg>
+  )
+}
+
+function LanguageSwitch({ lang, setLang }) {
+  return (
+    <div className="flex items-center rounded-full border border-white/30 p-1 text-[11px] font-bold uppercase tracking-widest">
       {['de', 'en'].map((code) => (
         <button
           key={code}
@@ -297,33 +347,68 @@ function LanguageSwitch({ lang, setLang, compact }) {
   )
 }
 
+/* ─── Testimonial Card ─── */
+function TestiCard({ item }) {
+  return (
+    <div className="flex flex-col bg-white rounded-2xl shadow-md p-6 h-full border border-[#e8dfc8]">
+      <div className="flex gap-1 text-[#d73532] mb-4">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <Star key={i} size={14} fill="currentColor" />
+        ))}
+      </div>
+      <p className="text-[#36543b] leading-relaxed text-sm flex-1">"{item.quote}"</p>
+      <footer className="mt-5 pt-4 border-t border-[#d8dfce]">
+        <strong className="block text-sm text-[#173b28]">{item.name}</strong>
+        <span className="text-xs uppercase tracking-widest text-[#879485]">{item.role}</span>
+      </footer>
+    </div>
+  )
+}
+
 function App() {
   const [lang, setLangState] = useState(() => localStorage.getItem('luigi-lang') || 'de')
   const [slide, setSlide] = useState(0)
   const [mobileNav, setMobileNav] = useState(false)
   const [galleryTab, setGalleryTab] = useState('all')
-  const [testiIndex, setTestiIndex] = useState(0)
+  // Testimonials: page index (each page = 3 cards on desktop, 1 on mobile)
+  const [testiPage, setTestiPage] = useState(0)
+  const [testiPerPage, setTestiPerPage] = useState(3)
+  const testiRef = useRef(null)
 
   const setLang = (code) => {
     setLangState(code)
     localStorage.setItem('luigi-lang', code)
   }
 
+  // Detect how many testimonials to show per page based on screen size
+  useEffect(() => {
+    const update = () => {
+      if (window.innerWidth < 640) setTestiPerPage(1)
+      else if (window.innerWidth < 1024) setTestiPerPage(2)
+      else setTestiPerPage(3)
+    }
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
+
   useEffect(() => {
     const timer = window.setInterval(() => setSlide((s) => (s + 1) % heroImages.length), 5200)
     return () => window.clearInterval(timer)
   }, [])
 
+  // Auto-advance testimonials
   useEffect(() => {
-    const timer = window.setInterval(() => setTestiIndex((i) => (i + 1) % TESTIMONIAL_COUNT), 6000)
+    const t = translations[lang]
+    const totalPages = Math.ceil(t.testimonials.items.length / testiPerPage)
+    const timer = window.setInterval(() => setTestiPage((p) => (p + 1) % totalPages), 6000)
     return () => window.clearInterval(timer)
-  }, [])
+  }, [lang, testiPerPage])
 
   useEffect(() => {
     const seo = translations[lang].seo
     document.documentElement.lang = lang
     document.title = seo.title
-
     const setMeta = (selector, content) => {
       const el = document.querySelector(selector)
       if (el) el.setAttribute('content', content)
@@ -339,6 +424,7 @@ function App() {
 
   const t = translations[lang]
   const activeSlide = t.hero.slides[slide]
+
   const galleryItems =
     galleryTab === 'all'
       ? [
@@ -357,32 +443,44 @@ function App() {
     { key: 'contact', href: '#contact', label: t.nav.contact },
   ]
 
+  // Testimonials pagination
+  const allTestis = t.testimonials.items
+  const totalTestiPages = Math.ceil(allTestis.length / testiPerPage)
+  const visibleTestis = allTestis.slice(testiPage * testiPerPage, testiPage * testiPerPage + testiPerPage)
+
+  const prevTesti = () => setTestiPage((p) => (p + totalTestiPages - 1) % totalTestiPages)
+  const nextTesti = () => setTestiPage((p) => (p + 1) % totalTestiPages)
+
   return (
     <div className="min-h-[100dvh] overflow-x-hidden bg-[#fbf5e8] text-[#193b27]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+
+      {/* ─── HEADER ─── */}
       <header className="fixed z-50 w-full border-b border-white/20 bg-[#173b28]/95 text-[#fff8e9] backdrop-blur-md">
-        <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between gap-4 px-5 lg:px-10">
-          <a href="#home" className="flex items-center gap-3">
-            <img src={logo} alt="Pizzeria Da Luigi" className="h-12 w-12 rounded-full object-cover ring-2 ring-[#f6c453]" />
-            <span className="font-oswald text-xl font-bold uppercase tracking-tight leading-[.85]">
+        <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
+          <a href="#home" className="flex items-center gap-3 shrink-0">
+            <img src={logo} alt="Pizzeria Da Luigi" className="h-10 w-10 sm:h-12 sm:w-12 rounded-full object-cover ring-2 ring-[#f6c453]" />
+            <span className="font-oswald text-lg sm:text-xl font-bold uppercase tracking-tight leading-[.85]">
               Pizzeria
               <br />
               <span className="text-[#f6c453]">Da Luigi</span>
             </span>
           </a>
-          <nav className="hidden items-center gap-6 text-[11px] font-bold uppercase tracking-[.15em] xl:flex">
+
+          <nav className="hidden items-center gap-5 text-[11px] font-bold uppercase tracking-[.15em] xl:flex">
             {navItems.map((item) => (
               <a
                 key={item.key}
                 href={item.href}
                 target={item.external ? '_blank' : undefined}
                 rel={item.external ? 'noreferrer' : undefined}
-                className="transition-colors hover:text-[#f6c453]"
+                className="transition-colors hover:text-[#f6c453] whitespace-nowrap"
               >
                 {item.label}
               </a>
             ))}
           </nav>
-          <div className="ml-auto flex items-center gap-3 lg:ml-0">
+
+          <div className="ml-auto flex items-center gap-2 lg:ml-0">
             <div className="hidden sm:block">
               <LanguageSwitch lang={lang} setLang={setLang} />
             </div>
@@ -390,17 +488,18 @@ function App() {
               href={ORDER_URL}
               target="_blank"
               rel="noreferrer"
-              className="hidden rounded-full bg-[#d73532] px-5 py-3 text-[11px] font-bold uppercase tracking-widest text-white shadow-[4px_4px_0_#f6c453] transition-transform hover:-translate-y-0.5 sm:block"
+              className="hidden rounded-full bg-[#d73532] px-4 py-2.5 text-[11px] font-bold uppercase tracking-widest text-white shadow-[3px_3px_0_#f6c453] transition-transform hover:-translate-y-0.5 sm:block"
             >
               {t.contact.orderCta}
             </a>
-            <button aria-label="Open menu" onClick={() => setMobileNav(!mobileNav)} className="xl:hidden">
-              {mobileNav ? <X /> : <MenuIcon />}
+            <button aria-label="Open menu" onClick={() => setMobileNav(!mobileNav)} className="xl:hidden p-1 text-white">
+              {mobileNav ? <X size={22} /> : <MenuIcon size={22} />}
             </button>
           </div>
         </div>
+
         {mobileNav && (
-          <nav className="flex flex-col gap-5 bg-[#173b28] px-6 pb-6 text-sm font-bold uppercase tracking-widest xl:hidden">
+          <nav className="flex flex-col gap-4 bg-[#173b28] px-6 pb-6 pt-2 text-sm font-bold uppercase tracking-widest xl:hidden">
             {navItems.map((item) => (
               <a
                 key={item.key}
@@ -408,19 +507,30 @@ function App() {
                 href={item.href}
                 target={item.external ? '_blank' : undefined}
                 rel={item.external ? 'noreferrer' : undefined}
+                className="border-b border-white/10 pb-3 text-[#fff8e9] hover:text-[#f6c453] transition-colors"
               >
                 {item.label}
               </a>
             ))}
-            <div className="pt-1 sm:hidden">
+            <div className="flex items-center justify-between pt-1">
               <LanguageSwitch lang={lang} setLang={setLang} />
+              <a
+                href={ORDER_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-full bg-[#d73532] px-5 py-2.5 text-[11px] font-bold uppercase tracking-widest text-white"
+              >
+                {t.contact.orderCta}
+              </a>
             </div>
           </nav>
         )}
       </header>
 
       <main id="home">
-        <section className="relative flex items-center overflow-hidden bg-[#173b28] pb-14 pt-[96px] text-white lg:pb-20 lg:pt-[110px]">
+
+        {/* ─── HERO ─── */}
+        <section className="relative flex items-center overflow-hidden bg-[#173b28] pb-14 pt-[96px] text-white min-h-[520px] sm:min-h-[600px] lg:pb-20 lg:pt-[110px]">
           {heroImages.map((image, i) => (
             <div key={image} className={`absolute inset-0 transition-opacity duration-700 ${i === slide ? 'opacity-100' : 'opacity-0'}`}>
               <img
@@ -431,82 +541,84 @@ function App() {
               <div className="absolute inset-0 bg-gradient-to-r from-[#102d1d]/90 via-[#173b28]/40 to-transparent" />
             </div>
           ))}
-          <div className="relative mx-auto w-full max-w-7xl px-5 lg:px-10">
-            <div className="max-w-3xl">
-              <p className="mb-4 flex items-center gap-3 text-xs font-bold tracking-[.28em] text-[#f6c453] sm:mb-5">
-                <span className="h-px w-10 bg-[#f6c453]" />
+          <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10">
+            <div className="max-w-xl sm:max-w-2xl lg:max-w-3xl">
+              <p className="mb-4 flex items-center gap-3 text-xs font-bold tracking-[.28em] text-[#f6c453]">
+                <span className="h-px w-8 bg-[#f6c453]" />
                 {activeSlide.eyebrow}
               </p>
-              <h1 className="font-oswald text-3xl font-bold uppercase leading-[.95] tracking-tight sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
+              <h1 className="font-oswald text-4xl font-bold uppercase leading-[.95] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
                 {activeSlide.title}
               </h1>
-              <p className="mt-5 max-w-lg text-base leading-relaxed text-[#fff8e9]/85 sm:mt-7 sm:text-lg">{activeSlide.copy}</p>
+              <p className="mt-5 max-w-lg text-base leading-relaxed text-[#fff8e9]/85 sm:text-lg">{activeSlide.copy}</p>
               <a
                 href={ORDER_URL}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-6 inline-flex items-center gap-3 rounded-full bg-[#d73532] px-7 py-4 text-sm font-bold uppercase tracking-wider shadow-[5px_5px_0_#f6c453] transition-transform hover:-translate-y-1 sm:mt-8"
+                className="mt-7 inline-flex items-center gap-3 rounded-full bg-[#d73532] px-6 py-3.5 text-sm font-bold uppercase tracking-wider shadow-[4px_4px_0_#f6c453] transition-transform hover:-translate-y-1 sm:px-8 sm:py-4"
               >
                 {t.contact.orderCta}
-                <ArrowRight size={17} />
+                <ArrowRight size={16} />
               </a>
             </div>
+
             <div className="mt-10 flex items-center gap-3 sm:mt-14">
               {heroImages.map((_, i) => (
                 <button
                   key={i}
                   aria-label={`Slide ${i + 1}`}
                   onClick={() => setSlide(i)}
-                  className={`h-2 transition-all ${i === slide ? 'w-14 bg-[#f6c453]' : 'w-7 bg-white/50'}`}
+                  className={`h-2 transition-all rounded-full ${i === slide ? 'w-12 bg-[#f6c453]' : 'w-6 bg-white/50'}`}
                 />
               ))}
-              <div className="ml-auto hidden items-center gap-2 sm:flex">
+              <div className="ml-auto flex items-center gap-2">
                 <button
                   onClick={() => setSlide((slide + heroImages.length - 1) % heroImages.length)}
-                  className="rounded-full border border-white/40 p-3 hover:bg-white/10"
+                  className="rounded-full border border-white/40 p-2.5 hover:bg-white/10"
                 >
-                  <ChevronLeft size={18} />
+                  <ChevronLeft size={16} />
                 </button>
                 <button
                   onClick={() => setSlide((slide + 1) % heroImages.length)}
-                  className="rounded-full border border-white/40 p-3 hover:bg-white/10"
+                  className="rounded-full border border-white/40 p-2.5 hover:bg-white/10"
                 >
-                  <ChevronRight size={18} />
+                  <ChevronRight size={16} />
                 </button>
               </div>
             </div>
           </div>
-          <div className="absolute right-[-25px] top-32 hidden rotate-90 text-[11px] font-bold tracking-[.5em] text-white/60 lg:block">
+          <div className="absolute right-[-28px] top-1/3 hidden rotate-90 text-[10px] font-bold tracking-[.5em] text-white/50 xl:block">
             {t.hero.sideText}
           </div>
         </section>
 
-        <section id="about" className="bg-[#fbf5e8] px-5 py-16 lg:px-10 lg:py-24">
-          <div className="mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[.9fr_1.1fr] lg:gap-24">
+        {/* ─── ABOUT ─── */}
+        <section id="about" className="bg-[#fbf5e8] px-4 py-16 sm:px-6 lg:px-10 lg:py-24">
+          <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[.9fr_1.1fr] lg:gap-20">
             <div className="relative">
               <img
                 src={aboutImg}
                 alt="Chef at Da Luigi"
-                className="h-[480px] w-full rounded-sm object-cover shadow-[16px_16px_0_#d73532] lg:h-[570px]"
+                className="h-[340px] w-full rounded-sm object-cover shadow-[12px_12px_0_#d73532] sm:h-[420px] lg:h-[520px]"
               />
-              <div className="absolute bottom-5 left-5 bg-[#f6c453] px-5 py-4 font-oswald text-2xl font-bold uppercase text-[#173b28]">
+              <div className="absolute bottom-5 left-5 bg-[#f6c453] px-4 py-3 font-oswald text-xl font-bold uppercase text-[#173b28] sm:text-2xl">
                 <span className="block text-xs tracking-widest">{t.about.since}</span> {t.about.sinceYear}
               </div>
             </div>
             <div>
-              <p className="mb-5 text-xs font-bold uppercase tracking-[.25em] text-[#d73532]">{t.about.eyebrow}</p>
+              <p className="mb-4 text-xs font-bold uppercase tracking-[.25em] text-[#d73532]">{t.about.eyebrow}</p>
               <h2 className="font-oswald text-3xl font-bold uppercase leading-[.95] text-[#173b28] sm:text-4xl lg:text-5xl">
                 {t.about.heading1}
                 <br />
                 <span className="text-[#d73532]">{t.about.heading2}</span>
               </h2>
-              <p className="mt-8 text-lg leading-relaxed text-[#476252]">{t.about.p1}</p>
-              <p className="mt-5 text-lg leading-relaxed text-[#476252]">{t.about.p2}</p>
+              <p className="mt-7 text-base leading-relaxed text-[#476252] sm:text-lg">{t.about.p1}</p>
+              <p className="mt-4 text-base leading-relaxed text-[#476252] sm:text-lg">{t.about.p2}</p>
               <a
                 href={ORDER_URL}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-8 inline-flex items-center gap-3 rounded-full bg-[#d73532] px-7 py-4 text-sm font-bold uppercase tracking-widest text-white shadow-[4px_4px_0_#f6c453] transition-transform hover:-translate-y-1"
+                className="mt-8 inline-flex items-center gap-3 rounded-full bg-[#d73532] px-6 py-3.5 text-sm font-bold uppercase tracking-widest text-white shadow-[4px_4px_0_#f6c453] transition-transform hover:-translate-y-1"
               >
                 {t.contact.orderCta} <ArrowRight size={16} />
               </a>
@@ -514,11 +626,65 @@ function App() {
           </div>
         </section>
 
-        <section id="gallery" className="bg-[#d73532] px-5 py-16 text-[#fff8e9] lg:px-10 lg:py-20">
+        {/* ─── AWARDS SECTION ─── */}
+        <section id="awards" className="relative overflow-hidden bg-[#fdf8ee] px-4 py-16 sm:px-6 lg:px-10 lg:py-20">
+          {/* Decorative background circles */}
+          <div className="pointer-events-none absolute -left-20 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-[#f6c453]/10" />
+          <div className="pointer-events-none absolute -right-20 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-[#d73532]/10" />
+
+          <div className="relative mx-auto max-w-5xl">
+            {/* Section header */}
+            <div className="mb-12 text-center">
+              <p className="mb-3 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[.3em] text-[#d73532]">
+                <span className="h-px w-8 bg-[#d73532]" />
+                {t.awards.eyebrow}
+                <span className="h-px w-8 bg-[#d73532]" />
+              </p>
+              <h2 className="font-oswald text-4xl font-bold uppercase leading-tight text-[#173b28] sm:text-5xl lg:text-6xl">
+                {t.awards.heading1}{' '}
+                <span className="text-[#d73532]">{t.awards.heading2}</span>
+              </h2>
+              <div className="mt-4 flex items-center justify-center gap-2">
+                <span className="h-px w-12 bg-[#c9a227]" />
+                <Star size={16} fill="#c9a227" className="text-[#c9a227]" />
+                <span className="h-px w-12 bg-[#c9a227]" />
+              </div>
+            </div>
+
+            {/* Award images only — no text below */}
+            <div className="grid gap-6 sm:grid-cols-2 sm:gap-10">
+              {awardImages.length > 0
+                ? awardImages.map((src, i) => (
+                    <div
+                      key={i}
+                      className="group flex items-center justify-center rounded-2xl border border-[#e8dfc8] bg-white p-6 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl sm:p-10"
+                    >
+                      <img
+                        src={src}
+                        alt={`Award ${i + 1}`}
+                        className="w-full max-w-xs object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-105 sm:max-w-sm"
+                      />
+                    </div>
+                  ))
+                : t.awards.items.map((award, i) => (
+                    <div
+                      key={i}
+                      className="group flex items-center justify-center rounded-2xl border border-[#e8dfc8] bg-white p-10 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+                    >
+                      <TrophySVG />
+                    </div>
+                  ))
+              }
+            </div>
+          </div>
+        </section>
+
+        {/* ─── GALLERY ─── */}
+        <section id="gallery" className="bg-[#d73532] px-4 py-16 text-[#fff8e9] sm:px-6 lg:px-10 lg:py-20">
           <div className="mx-auto max-w-7xl">
             <div className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
               <div>
-                <p className="mb-4 text-xs font-bold uppercase tracking-[.25em] text-[#f6c453]">{t.gallery.eyebrow}</p>
+                <p className="mb-3 text-xs font-bold uppercase tracking-[.25em] text-[#f6c453]">{t.gallery.eyebrow}</p>
                 <h2 className="font-oswald text-3xl font-bold uppercase leading-none sm:text-4xl lg:text-6xl">
                   {t.gallery.heading1}
                   <br />
@@ -530,12 +696,12 @@ function App() {
               </p>
             </div>
 
-            <div className="mb-8 flex flex-wrap gap-3">
+            <div className="mb-7 flex flex-wrap gap-2">
               {['all', 'food', 'place', 'pizza'].map((key) => (
                 <button
                   key={key}
                   onClick={() => setGalleryTab(key)}
-                  className={`rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-widest transition-colors ${
+                  className={`rounded-full px-4 py-2 text-xs font-bold uppercase tracking-widest transition-colors ${
                     galleryTab === key
                       ? 'bg-[#f6c453] text-[#173b28]'
                       : 'border border-white/40 text-white/85 hover:border-[#f6c453] hover:text-[#f6c453]'
@@ -546,7 +712,7 @@ function App() {
               ))}
             </div>
 
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 sm:gap-3">
               {galleryItems.map(({ src, category }) => {
                 categoryCounters[category] = (categoryCounters[category] || 0) + 1
                 const label = `${t.gallery.tabs[category]} ${categoryCounters[category]}`
@@ -571,18 +737,19 @@ function App() {
           </div>
         </section>
 
-        <section className="bg-[#f6c453] px-5 py-14 lg:px-10 lg:py-16">
+        {/* ─── WHY LUIGI ─── */}
+        <section className="bg-[#f6c453] px-4 py-14 sm:px-6 lg:px-10 lg:py-16">
           <div className="mx-auto max-w-7xl">
             <p className="mb-8 text-center font-oswald text-2xl font-bold uppercase text-[#173b28] sm:text-3xl lg:text-4xl">
               {t.why.heading1} <span className="text-[#d73532]">{t.why.heading2}</span>
             </p>
-            <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {t.why.items.map((item, i) => {
                 const Icon = whyIcons[i]
                 return (
                   <div key={item.title} className="border-t-2 border-[#173b28] pt-5">
-                    <Icon className="mb-5 text-[#d73532]" size={30} />
-                    <h3 className="font-oswald text-2xl font-bold uppercase">{item.title}</h3>
+                    <Icon className="mb-4 text-[#d73532]" size={28} />
+                    <h3 className="font-oswald text-xl font-bold uppercase sm:text-2xl">{item.title}</h3>
                     <p className="mt-3 text-sm leading-relaxed text-[#36543b]">{item.copy}</p>
                   </div>
                 )
@@ -601,11 +768,15 @@ function App() {
           </div>
         </section>
 
-        <section className="bg-[#fbf5e8] px-5 py-16 lg:px-10 lg:py-24">
+
+
+        {/* ─── TESTIMONIALS ─── */}
+        <section className="bg-[#fbf5e8] px-4 py-16 sm:px-6 lg:px-10 lg:py-24">
           <div className="mx-auto max-w-7xl">
-            <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+            {/* Header */}
+            <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end mb-10">
               <div>
-                <p className="mb-4 text-xs font-bold uppercase tracking-[.25em] text-[#d73532]">{t.testimonials.eyebrow}</p>
+                <p className="mb-3 text-xs font-bold uppercase tracking-[.25em] text-[#d73532]">{t.testimonials.eyebrow}</p>
                 <h2 className="font-oswald text-3xl font-bold uppercase leading-none text-[#173b28] sm:text-4xl lg:text-6xl">
                   {t.testimonials.heading1}
                   <br />
@@ -614,59 +785,50 @@ function App() {
               </div>
               <div className="flex gap-1 text-[#d73532]">
                 {[1, 2, 3, 4, 5].map((i) => (
-                  <Star key={i} size={19} fill="currentColor" />
+                  <Star key={i} size={18} fill="currentColor" />
                 ))}
               </div>
             </div>
-            <div className="relative mx-auto mt-10 max-w-2xl">
-              {(() => {
-                const { quote, name, role } = t.testimonials.items[testiIndex]
-                return (
-                  <blockquote key={name} className="bg-white/70 p-7 shadow-sm sm:p-10">
-                    <div className="mb-5 flex gap-1 text-[#d73532]">
-                      {[1, 2, 3, 4, 5].map((i) => (
-                        <Star key={i} size={14} fill="currentColor" />
-                      ))}
-                    </div>
-                    <p className="text-lg leading-relaxed text-[#36543b]">{quote}</p>
-                    <footer className="mt-7 border-t border-[#d8dfce] pt-4">
-                      <strong className="block text-sm">{name}</strong>
-                      <span className="text-xs uppercase tracking-widest text-[#879485]">{role}</span>
-                    </footer>
-                  </blockquote>
-                )
-              })()}
-              <div className="mt-6 flex items-center justify-center gap-4">
-                <button
-                  aria-label="Previous review"
-                  onClick={() => setTestiIndex((i) => (i + TESTIMONIAL_COUNT - 1) % TESTIMONIAL_COUNT)}
-                  className="rounded-full border border-[#173b28]/20 p-3 text-[#173b28] hover:bg-[#173b28]/5"
-                >
-                  <ChevronLeft size={18} />
-                </button>
-                <div className="flex items-center gap-2">
-                  {t.testimonials.items.map((_, i) => (
-                    <button
-                      key={i}
-                      aria-label={`Review ${i + 1}`}
-                      onClick={() => setTestiIndex(i)}
-                      className={`h-2 rounded-full transition-all ${i === testiIndex ? 'w-8 bg-[#d73532]' : 'w-2 bg-[#173b28]/20'}`}
-                    />
-                  ))}
-                </div>
-                <button
-                  aria-label="Next review"
-                  onClick={() => setTestiIndex((i) => (i + 1) % TESTIMONIAL_COUNT)}
-                  className="rounded-full border border-[#173b28]/20 p-3 text-[#173b28] hover:bg-[#173b28]/5"
-                >
-                  <ChevronRight size={18} />
-                </button>
+
+            {/* Cards grid */}
+            <div ref={testiRef} className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {visibleTestis.map((item) => (
+                <TestiCard key={item.name} item={item} />
+              ))}
+            </div>
+
+            {/* Controls */}
+            <div className="mt-8 flex items-center justify-center gap-4">
+              <button
+                aria-label="Previous reviews"
+                onClick={prevTesti}
+                className="rounded-full border border-[#173b28]/20 p-3 text-[#173b28] hover:bg-[#173b28]/5 transition-colors"
+              >
+                <ChevronLeft size={18} />
+              </button>
+              <div className="flex items-center gap-2">
+                {Array.from({ length: totalTestiPages }).map((_, i) => (
+                  <button
+                    key={i}
+                    aria-label={`Review page ${i + 1}`}
+                    onClick={() => setTestiPage(i)}
+                    className={`h-2 rounded-full transition-all ${i === testiPage ? 'w-8 bg-[#d73532]' : 'w-2 bg-[#173b28]/20'}`}
+                  />
+                ))}
               </div>
+              <button
+                aria-label="Next reviews"
+                onClick={nextTesti}
+                className="rounded-full border border-[#173b28]/20 p-3 text-[#173b28] hover:bg-[#173b28]/5 transition-colors"
+              >
+                <ChevronRight size={18} />
+              </button>
             </div>
           </div>
         </section>
 
-        <section id="contact" className="bg-[#d73532] px-5 py-16 text-[#fff8e9] lg:px-10 lg:py-20">
+        {/* ─── CONTACT ─── */}
+        <section id="contact" className="bg-[#d73532] px-4 py-16 text-[#fff8e9] sm:px-6 lg:px-10 lg:py-20">
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
               <div>
@@ -681,49 +843,49 @@ function App() {
                 href={ORDER_URL}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-3 rounded-full bg-[#f6c453] px-7 py-4 text-sm font-bold uppercase tracking-widest text-[#173b28] shadow-[4px_4px_0_#173b28] transition-transform hover:-translate-y-1"
+                className="self-start sm:self-auto inline-flex items-center gap-3 rounded-full bg-[#f6c453] px-6 py-3.5 text-sm font-bold uppercase tracking-widest text-[#173b28] shadow-[4px_4px_0_#173b28] transition-transform hover:-translate-y-1"
               >
                 {t.contact.orderCta} <ArrowRight size={16} />
               </a>
             </div>
 
-            <div className="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-[.8fr_1.2fr]">
+            <div className="mt-10 grid grid-cols-1 gap-4 lg:grid-cols-[.8fr_1.2fr]">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
                 <a
                   href="https://maps.google.com/?q=Landshutterstr+33,+93053+Regensburg"
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-start gap-4 bg-white/10 p-6 transition-colors hover:bg-white/15"
+                  className="flex items-start gap-4 bg-white/10 p-5 transition-colors hover:bg-white/15"
                 >
-                  <MapPin className="mt-1 shrink-0 text-[#f6c453]" />
+                  <MapPin className="mt-1 shrink-0 text-[#f6c453]" size={20} />
                   <div className="min-w-0">
                     <p className="text-xs font-bold uppercase tracking-widest text-[#f6c453]">{t.contact.addressLabel}</p>
-                    <p className="mt-2 text-lg">
+                    <p className="mt-2 text-base sm:text-lg">
                       {t.contact.address1}
                       <br />
                       {t.contact.address2}
                     </p>
                   </div>
                 </a>
-                <a href="tel:+4994156995899" className="flex items-start gap-4 bg-white/10 p-6 transition-colors hover:bg-white/15">
-                  <Phone className="mt-1 shrink-0 text-[#f6c453]" />
+                <a href="tel:+4994156995899" className="flex items-start gap-4 bg-white/10 p-5 transition-colors hover:bg-white/15">
+                  <Phone className="mt-1 shrink-0 text-[#f6c453]" size={20} />
                   <div className="min-w-0">
                     <p className="text-xs font-bold uppercase tracking-widest text-[#f6c453]">{t.contact.phoneLabel}</p>
-                    <p className="mt-2 text-lg">{t.contact.phone}</p>
+                    <p className="mt-2 text-base sm:text-lg">{t.contact.phone}</p>
                   </div>
                 </a>
-                <a href={`mailto:${t.contact.email}`} className="flex items-start gap-4 bg-white/10 p-6 transition-colors hover:bg-white/15">
-                  <Mail className="mt-1 shrink-0 text-[#f6c453]" />
+                <a href={`mailto:${t.contact.email}`} className="flex items-start gap-4 bg-white/10 p-5 transition-colors hover:bg-white/15">
+                  <Mail className="mt-1 shrink-0 text-[#f6c453]" size={20} />
                   <div className="min-w-0">
                     <p className="text-xs font-bold uppercase tracking-widest text-[#f6c453]">{t.contact.emailLabel}</p>
-                    <p className="mt-2 break-words text-lg">{t.contact.email}</p>
+                    <p className="mt-2 break-all text-base sm:text-lg">{t.contact.email}</p>
                   </div>
                 </a>
-                <div className="flex items-start gap-4 bg-white/10 p-6">
-                  <Clock3 className="mt-1 shrink-0 text-[#f6c453]" />
+                <div className="flex items-start gap-4 bg-white/10 p-5">
+                  <Clock3 className="mt-1 shrink-0 text-[#f6c453]" size={20} />
                   <div className="min-w-0">
                     <p className="text-xs font-bold uppercase tracking-widest text-[#f6c453]">{t.contact.hoursLabel}</p>
-                    <p className="mt-2 text-lg">
+                    <p className="mt-2 text-base sm:text-lg">
                       {t.contact.hours1}
                       <br />
                       {t.contact.hours2}
@@ -731,11 +893,11 @@ function App() {
                   </div>
                 </div>
               </div>
-              <div className="min-h-[320px] w-full min-w-0 overflow-hidden border border-white/30 lg:min-h-full">
+              <div className="min-h-[280px] w-full min-w-0 overflow-hidden border border-white/30 sm:min-h-[360px] lg:min-h-full">
                 <iframe
                   title="Pizzeria Da Luigi location"
                   className="h-full w-full"
-                  style={{ minHeight: 320, width: '100%' }}
+                  style={{ minHeight: 280, width: '100%' }}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   src="https://maps.google.com/maps?q=Landshutterstr%2033%2C%2093053%20Regensburg&t=&z=15&ie=UTF8&iwloc=&output=embed"
@@ -746,49 +908,53 @@ function App() {
         </section>
       </main>
 
-      <footer className="bg-[#173b28] px-5 py-12 text-[#fff8e9] lg:px-10">
-        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 sm:flex-row sm:items-end">
+      {/* ─── FOOTER ─── */}
+      <footer className="bg-[#173b28] px-4 py-12 text-[#fff8e9] sm:px-6 lg:px-10">
+        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 sm:flex-row sm:flex-wrap sm:items-end">
           <div>
             <a href="#home" className="flex items-center gap-3">
-              <img src={logo} alt="Pizzeria Da Luigi" className="h-12 w-12 rounded-full object-cover" />
+              <img src={logo} alt="Pizzeria Da Luigi" className="h-10 w-10 rounded-full object-cover" />
               <span className="font-oswald text-xl font-bold uppercase leading-[.85]">
                 Pizzeria
                 <br />
                 <span className="text-[#f6c453]">Da Luigi</span>
               </span>
             </a>
-            <p className="mt-5 text-xs text-[#b9cbb9]">{t.footer.tagline}</p>
+            <p className="mt-4 text-xs text-[#b9cbb9]">{t.footer.tagline}</p>
           </div>
+
           <div className="text-xs text-[#b9cbb9]">
-            <a href="tel:+4994156995899" className="block hover:text-[#f6c453]">{t.contact.phone}</a>
-            <a href={`mailto:${t.contact.email}`} className="mt-2 block break-words hover:text-[#f6c453]">{t.contact.email}</a>
+            <a href="tel:+4994156995899" className="block hover:text-[#f6c453] transition-colors">{t.contact.phone}</a>
+            <a href={`mailto:${t.contact.email}`} className="mt-2 block break-all hover:text-[#f6c453] transition-colors">{t.contact.email}</a>
             <a
               href="https://maps.google.com/?q=Landshutterstr+33,+93053+Regensburg"
               target="_blank"
               rel="noreferrer"
-              className="mt-2 block hover:text-[#f6c453]"
+              className="mt-2 block hover:text-[#f6c453] transition-colors"
             >
               {t.contact.address1}, {t.contact.address2}
             </a>
           </div>
-          <div className="flex gap-6 text-xs font-bold uppercase tracking-widest">
-            <a href="#about" className="hover:text-[#f6c453]">{t.footer.about}</a>
-            <a href="#gallery" className="hover:text-[#f6c453]">{t.nav.gallery}</a>
-            <a href="#contact" className="hover:text-[#f6c453]">{t.footer.contact}</a>
+
+          <div className="flex gap-5 text-xs font-bold uppercase tracking-widest">
+            <a href="#about" className="hover:text-[#f6c453] transition-colors">{t.footer.about}</a>
+            <a href="#gallery" className="hover:text-[#f6c453] transition-colors">{t.nav.gallery}</a>
+            <a href="#contact" className="hover:text-[#f6c453] transition-colors">{t.footer.contact}</a>
           </div>
-          <div className="flex flex-wrap items-center gap-3 sm:justify-end">
+
+          <div className="flex flex-wrap items-center gap-3">
             <LanguageSwitch lang={lang} setLang={setLang} />
             <a
               aria-label="Facebook"
               href="https://www.facebook.com/pizzeriadaluigiregensburg/"
               target="_blank"
               rel="noreferrer"
-              className="rounded-full border border-white/30 p-3 hover:border-[#f6c453]"
+              className="rounded-full border border-white/30 p-3 hover:border-[#f6c453] transition-colors"
             >
-              <FacebookIcon width={17} height={17} />
+              <FacebookIcon width={16} height={16} />
             </a>
-            <a aria-label="Email" href={`mailto:${t.contact.email}`} className="rounded-full border border-white/30 p-3 hover:border-[#f6c453]">
-              <Mail size={17} />
+            <a aria-label="Email" href={`mailto:${t.contact.email}`} className="rounded-full border border-white/30 p-3 hover:border-[#f6c453] transition-colors">
+              <Mail size={16} />
             </a>
             <a
               href={ORDER_URL}
@@ -800,8 +966,18 @@ function App() {
             </a>
           </div>
         </div>
+
         <div className="mx-auto mt-10 max-w-7xl border-t border-white/15 pt-5 text-[10px] uppercase tracking-widest text-[#8ea18e]">
-          © 2024 Pizzeria Da Luigi · {t.footer.rights}
+          © 2026 Developed by{' '}
+          <a
+            href="https://www.neosoftix.com/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-[#f6c453] hover:text-white transition-colors"
+          >
+            NeoSoftix.com
+          </a>
+          {' '}· All rights reserved
         </div>
       </footer>
     </div>
