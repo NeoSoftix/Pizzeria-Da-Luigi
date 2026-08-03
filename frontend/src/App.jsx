@@ -118,19 +118,36 @@ const translations = {
       heading2: 'mille.',
       items: [
         {
-          quote: 'Die Kruste hat genau das richtige Knuspern und die Sauce schmeckt wie Sommer in Neapel. Wir planen schon unseren nächsten Besuch.',
-          name: 'Maya R.',
-          role: 'Stammgast samstags',
+          quote:
+            'Ich habe eine köstliche Pizza und vegetarische Kartoffeln bei Pizzeria Da Luigi bestellt. Die Pizza war perfekt gebacken und hat hervorragend geschmeckt. Auch die vegetarischen Kartoffeln waren sehr gut. Der Service war freundlich und aufmerksam.',
+          name: 'Kaderimsensin',
+          role: 'Local Guide · 52 Bewertungen',
         },
         {
-          quote: 'Wir kamen zu einem Geburtstag und Luigi hat Tiramisu mit einer Kerze geschickt. Das ist unser neuer Familienort.',
-          name: 'Tom B.',
-          role: 'Geburtstagstisch 7',
+          quote:
+            'Ich bin seit über zwei Jahren Kunde, und es wird Zeit für eine Bewertung. Die Lieferung war bisher immer sehr schnell und zuverlässig! Ob Pizza oder Pasta – das Essen kommt immer heiß und lecker an.',
+          name: 'Nikolas Lustig',
+          role: 'Local Guide · 14 Bewertungen',
         },
         {
-          quote: 'Die beste Pizza außerhalb Italiens. Schnell, warm, großzügig und jedes Stück wert.',
-          name: 'Jess C.',
-          role: 'Lieferservice-Fan',
+          quote: 'Sehr leckeres Essen und immer freundliche Lieferfahrer.',
+          name: 'R J',
+          role: 'Local Guide · 160 Bewertungen',
+        },
+        {
+          quote: 'Tolles Essen, die besten Pizzen, Lieferung in 30 statt der angegebenen 60 Minuten. Immer wieder gerne! 👍',
+          name: 'Christina Aulig',
+          role: 'Local Guide · 20 Bewertungen',
+        },
+        {
+          quote: 'Das Personal hier ist absolut liebenswürdig, und die Pizza ist wirklich lecker und sehr preiswert. Der Service ist unschlagbar!',
+          name: 'Larissa Andresen',
+          role: '11 Bewertungen',
+        },
+        {
+          quote: 'Bestell hier schon seit Jahren immer wieder mal. Eine der besten Pizzen der Stadt und das sehr konstant. Immer wieder gerne, ich bleib euch treu 😊',
+          name: 'Chris M.',
+          role: '3 Bewertungen',
         },
       ],
     },
@@ -213,19 +230,36 @@ const translations = {
       heading2: 'mille.',
       items: [
         {
-          quote: "The crust has that perfect crackle and the sauce tastes like summer in Naples. We're already planning our next visit.",
-          name: 'Maya R.',
-          role: 'Saturday regular',
+          quote:
+            'I ordered a delicious pizza and vegetarian potatoes from Pizzeria Da Luigi. The pizza was perfectly baked and tasted great. The vegetarian potatoes were also very good and offered a nice change. The service was friendly and attentive.',
+          name: 'Kaderimsensin',
+          role: 'Local Guide · 52 reviews',
         },
         {
-          quote: 'We came for a birthday and Luigi sent out tiramisu with a candle. This is our new family place.',
-          name: 'Tom B.',
-          role: 'Birthday table 7',
+          quote:
+            "I've been a customer for over two years now, and it's about time I left a review. So far, deliveries have always been very quick and reliable! The food, whether pizza or pasta, always arrives hot and delicious.",
+          name: 'Nikolas Lustig',
+          role: 'Local Guide · 14 reviews',
         },
         {
-          quote: "Best pizza I've had outside Italy. Fast, warm, generous, and absolutely worth the extra slice.",
-          name: 'Jess C.',
-          role: 'Delivery fan',
+          quote: 'Very tasty food and always friendly delivery drivers.',
+          name: 'R J',
+          role: 'Local Guide · 160 reviews',
+        },
+        {
+          quote: 'Amazing food, the best pizzas, delivery within 30 minutes instead of the stated 60. Always a pleasure! 👍',
+          name: 'Christina Aulig',
+          role: 'Local Guide · 20 reviews',
+        },
+        {
+          quote: 'The staff here are absolutely lovely, and the pizza is really delicious and very reasonably priced. The service is unbeatable!',
+          name: 'Larissa Andresen',
+          role: '11 reviews',
+        },
+        {
+          quote: "One of the best pizzas in the city, and very consistently so. I've been ordering here for years and keep coming back happily.",
+          name: 'Chris M.',
+          role: '3 reviews',
         },
       ],
     },
