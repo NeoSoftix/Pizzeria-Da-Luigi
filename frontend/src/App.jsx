@@ -661,8 +661,8 @@ function App() {
               </a>
             </div>
 
-            <div className="mt-14 grid gap-5 lg:grid-cols-[.8fr_1.2fr]">
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+            <div className="mt-14 grid grid-cols-1 gap-5 lg:grid-cols-[.8fr_1.2fr]">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
                 <a
                   href="https://maps.google.com/?q=Landshutterstr+33,+93053+Regensburg"
                   target="_blank"
@@ -670,7 +670,7 @@ function App() {
                   className="flex items-start gap-4 bg-white/10 p-6 transition-colors hover:bg-white/15"
                 >
                   <MapPin className="mt-1 shrink-0 text-[#f6c453]" />
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-xs font-bold uppercase tracking-widest text-[#f6c453]">{t.contact.addressLabel}</p>
                     <p className="mt-2 text-lg">
                       {t.contact.address1}
@@ -681,21 +681,21 @@ function App() {
                 </a>
                 <a href="tel:+4994156995899" className="flex items-start gap-4 bg-white/10 p-6 transition-colors hover:bg-white/15">
                   <Phone className="mt-1 shrink-0 text-[#f6c453]" />
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-xs font-bold uppercase tracking-widest text-[#f6c453]">{t.contact.phoneLabel}</p>
                     <p className="mt-2 text-lg">{t.contact.phone}</p>
                   </div>
                 </a>
                 <a href={`mailto:${t.contact.email}`} className="flex items-start gap-4 bg-white/10 p-6 transition-colors hover:bg-white/15">
                   <Mail className="mt-1 shrink-0 text-[#f6c453]" />
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-xs font-bold uppercase tracking-widest text-[#f6c453]">{t.contact.emailLabel}</p>
-                    <p className="mt-2 text-lg">{t.contact.email}</p>
+                    <p className="mt-2 break-words text-lg">{t.contact.email}</p>
                   </div>
                 </a>
                 <div className="flex items-start gap-4 bg-white/10 p-6">
                   <Clock3 className="mt-1 shrink-0 text-[#f6c453]" />
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-xs font-bold uppercase tracking-widest text-[#f6c453]">{t.contact.hoursLabel}</p>
                     <p className="mt-2 text-lg">
                       {t.contact.hours1}
@@ -705,11 +705,11 @@ function App() {
                   </div>
                 </div>
               </div>
-              <div className="min-h-[320px] overflow-hidden border border-white/30 lg:min-h-full">
+              <div className="min-h-[320px] w-full min-w-0 overflow-hidden border border-white/30 lg:min-h-full">
                 <iframe
                   title="Pizzeria Da Luigi location"
                   className="h-full w-full"
-                  style={{ minHeight: 320 }}
+                  style={{ minHeight: 320, width: '100%' }}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   src="https://maps.google.com/maps?q=Landshutterstr%2033%2C%2093053%20Regensburg&t=&z=15&ie=UTF8&iwloc=&output=embed"
@@ -735,7 +735,7 @@ function App() {
           </div>
           <div className="text-xs text-[#b9cbb9]">
             <a href="tel:+4994156995899" className="block hover:text-[#f6c453]">{t.contact.phone}</a>
-            <a href={`mailto:${t.contact.email}`} className="mt-2 block hover:text-[#f6c453]">{t.contact.email}</a>
+            <a href={`mailto:${t.contact.email}`} className="mt-2 block break-words hover:text-[#f6c453]">{t.contact.email}</a>
             <a
               href="https://maps.google.com/?q=Landshutterstr+33,+93053+Regensburg"
               target="_blank"
@@ -750,7 +750,7 @@ function App() {
             <a href="#gallery" className="hover:text-[#f6c453]">{t.nav.gallery}</a>
             <a href="#contact" className="hover:text-[#f6c453]">{t.footer.contact}</a>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-3 sm:justify-end">
             <LanguageSwitch lang={lang} setLang={setLang} />
             <a aria-label="Instagram" href="#home" className="rounded-full border border-white/30 p-3 hover:border-[#f6c453]">
               <InstagramIcon width={17} height={17} />
