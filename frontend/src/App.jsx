@@ -410,7 +410,7 @@ function App() {
               <img
                 src={image}
                 alt=""
-                className={`h-full w-full opacity-75 ${i === 0 ? 'object-cover object-top' : 'object-contain object-right'}`}
+                className={`h-full w-full object-cover opacity-75 ${i === 0 ? 'object-top' : 'object-center'}`}
               />
               <div className="absolute inset-0 bg-gradient-to-r from-[#102d1d]/90 via-[#173b28]/40 to-transparent" />
             </div>
