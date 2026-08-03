@@ -37,7 +37,7 @@ import logo from './assets/logo.png'
 import hero1 from './assets/hero1.png'
 import hero2 from './assets/hero2.png'
 import hero3 from './assets/hero3.png'
-import aboutImg from './assets/aboutus.png'
+import aboutImg from './assets/ourplace/image.png'
 
 const pizzaGlob = import.meta.glob('./assets/pizza/*.{png,jpg,jpeg,webp}', { eager: true, import: 'default' })
 const foodGlob = import.meta.glob('./assets/food/*.{png,jpg,jpeg,webp}', { eager: true, import: 'default' })
@@ -521,9 +521,6 @@ function App() {
                 return (
                   <div key={src} className={`group relative overflow-hidden ${i % 5 === 1 || i % 5 === 4 ? 'aspect-[.82]' : 'aspect-square'}`}>
                     <img src={src} alt={label} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#173b28]/80 to-transparent p-4 pt-12 text-sm font-bold uppercase tracking-wider">
-                      {label}
-                    </div>
                   </div>
                 )
               })}
