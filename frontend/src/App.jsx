@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react'
 import {
   ArrowRight,
@@ -76,13 +77,11 @@ const translations = {
           eyebrow: 'PIZZA, PASSIONE, FAMIGLIA',
           title: 'Neapel auf dem Teller.',
           copy: 'Von Hand gezogener Teig, San-Marzano-Tomaten und ein bisschen Luigi-Magie.',
-          cta: 'Jetzt bestellen',
         },
         {
           eyebrow: 'ORDENTLICH SCHARF',
           title: 'Ein bisschen scharf. Sehr unvergesslich.',
           copy: 'Unsere Diavola bringt Feuer mit kalabrischem Chili, Fenchelsalami und knusprigen Rändern.',
-          cta: 'Zur Galerie',
         },
       ],
       sideText: 'BENVENUTI A TAVOLA',
@@ -95,7 +94,6 @@ const translations = {
       sinceYear: '1987',
       p1: 'Luigi brachte den Nudelholz seiner Großmutter, die Rezepte seines Vaters und eine sehr ernste Meinung zu Tomaten mit aus Napoli. Drei Jahrzehnte später formen wir noch immer jeden Teigling von Hand und jeder Tisch fühlt sich an wie Familie.',
       p2: 'Keine Abkürzungen. Nichts aus der Tiefkühltruhe. Einfach der alte Weg, mit Freude gemacht.',
-      cta: 'Unsere Geschichte',
     },
     gallery: {
       eyebrow: 'Erst mit den Augen essen',
@@ -175,13 +173,11 @@ const translations = {
           eyebrow: 'PIZZA, PASSIONE, FAMIGLIA',
           title: 'Naples on a plate.',
           copy: 'Hand-stretched dough, San Marzano tomatoes, and a little bit of Luigi magic.',
-          cta: 'Order a slice',
         },
         {
           eyebrow: 'TURN UP THE HEAT',
           title: 'A little spicy. Very unforgettable.',
           copy: 'Our Diavola brings the fire with Calabrian chili, fennel salami, and charred edges.',
-          cta: 'See the gallery',
         },
       ],
       sideText: 'BENVENUTI A TAVOLA',
@@ -194,7 +190,6 @@ const translations = {
       sinceYear: '1987',
       p1: "Luigi brought his grandmother's rolling pin, his father's recipes, and a very serious opinion about tomatoes all the way from Napoli. Three decades later, we still make every dough ball by hand and every table feel like family.",
       p2: 'No shortcuts. No frozen anything. Just the old way, done with joy.',
-      cta: 'Our story',
     },
     gallery: {
       eyebrow: 'Eat with your eyes first',
@@ -426,12 +421,12 @@ function App() {
               </h1>
               <p className="mt-5 max-w-lg text-base leading-relaxed text-[#fff8e9]/85 sm:mt-7 sm:text-lg">{activeSlide.copy}</p>
               <a
-                href={slide === 0 ? ORDER_URL : '#gallery'}
-                target={slide === 0 ? '_blank' : undefined}
-                rel={slide === 0 ? 'noreferrer' : undefined}
+                href={ORDER_URL}
+                target="_blank"
+                rel="noreferrer"
                 className="mt-6 inline-flex items-center gap-3 rounded-full bg-[#d73532] px-7 py-4 text-sm font-bold uppercase tracking-wider shadow-[5px_5px_0_#f6c453] transition-transform hover:-translate-y-1 sm:mt-8"
               >
-                {activeSlide.cta}
+                {t.contact.orderCta}
                 <ArrowRight size={17} />
               </a>
             </div>
@@ -487,10 +482,12 @@ function App() {
               <p className="mt-8 text-lg leading-relaxed text-[#476252]">{t.about.p1}</p>
               <p className="mt-5 text-lg leading-relaxed text-[#476252]">{t.about.p2}</p>
               <a
-                href="#contact"
-                className="mt-8 inline-flex items-center gap-3 border-b-2 border-[#d73532] pb-2 text-sm font-bold uppercase tracking-widest text-[#d73532]"
+                href={ORDER_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-8 inline-flex items-center gap-3 rounded-full bg-[#d73532] px-7 py-4 text-sm font-bold uppercase tracking-widest text-white shadow-[4px_4px_0_#f6c453] transition-transform hover:-translate-y-1"
               >
-                {t.about.cta} <ArrowRight size={16} />
+                {t.contact.orderCta} <ArrowRight size={16} />
               </a>
             </div>
           </div>
