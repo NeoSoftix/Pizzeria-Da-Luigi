@@ -36,7 +36,6 @@ function FacebookIcon(props) {
 import logo from './assets/logo.png'
 import hero1 from './assets/hero1.png'
 import hero2 from './assets/hero2.png'
-import hero3 from './assets/hero3.png'
 import aboutImg from './assets/ourplace/image.png'
 
 const pizzaGlob = import.meta.glob('./assets/pizza/*.{png,jpg,jpeg,webp}', { eager: true, import: 'default' })
@@ -58,13 +57,18 @@ const galleryData = {
 const GALLERY_PAGE_SIZE = 6
 const ORDER_URL = 'https://order.pizzeriadaluigiregensburg.de/'
 
-const heroImages = [hero1, hero2, hero3]
+const heroImages = [hero1, hero2]
 
 const whyIcons = [Flame, Check, Truck, Star]
 
 const translations = {
   de: {
     langLabel: 'DE',
+    seo: {
+      title: 'Pizzeria Da Luigi Regensburg – Original italienische Pizza & Pasta',
+      description:
+        'Handgemachte Pizza aus dem 480°-Holzofen, frische Pasta und italienische Klassiker in Regensburg. Landshutterstr 33, 93053 Regensburg. Jetzt online bestellen!',
+    },
     nav: { home: 'Start', menu: 'Speisekarte', order: 'Bestellung', about: 'Über uns', gallery: 'Galerie', contact: 'Kontakt' },
     hero: {
       slides: [
@@ -79,12 +83,6 @@ const translations = {
           title: 'Ein bisschen scharf. Sehr unvergesslich.',
           copy: 'Unsere Diavola bringt Feuer mit kalabrischem Chili, Fenchelsalami und knusprigen Rändern.',
           cta: 'Zur Galerie',
-        },
-        {
-          eyebrow: 'DER ALTE WEG IST DER BESTE WEG',
-          title: 'Holzofen. Großes Herz.',
-          copy: 'Jede Pizza kommt in den 480°-Ofen, denn bei uns gibt es keine Abkürzungen.',
-          cta: 'Familie kennenlernen',
         },
       ],
       sideText: 'BENVENUTI A TAVOLA',
@@ -144,20 +142,17 @@ const translations = {
       eyebrow: 'Sag einfach ciao',
       heading1: 'Setz dich',
       heading2: 'zu uns.',
+      addressLabel: 'Adresse',
       address1: 'Landshutterstr 33',
       address2: '93053 Regensburg',
+      phoneLabel: 'Telefon',
       phone: '0941 56995899',
+      emailLabel: 'E-Mail',
+      email: 'ciao@dalugui.pizza',
+      hoursLabel: 'Öffnungszeiten',
       hours1: 'Di–So · 11:30–23:00 Uhr',
       hours2: 'Montags geschlossen (auch Luigi ruht sich aus)',
-      formHeadingIdle: 'Reserviere mir einen Platz.',
-      formHeadingSent: 'Grazie mille!',
-      sentMessage: 'Deine Tischanfrage ist unterwegs. Wir melden uns gleich bei dir.',
-      formIntro: 'Bei Gruppen ab 8 Personen ruf uns bitte an. Ansonsten schick uns eine Nachricht und wir kümmern uns darum.',
-      nameLabel: 'Name',
-      emailLabel: 'E-Mail',
-      helpLabel: 'Wie können wir helfen?',
-      helpPlaceholder: 'Ein Tisch für sechs, bitte...',
-      send: 'Absenden',
+      orderCta: 'Jetzt bestellen',
     },
     footer: {
       tagline: 'Mit Liebe, Feuer & jeder Menge Mehl gemacht.',
@@ -168,6 +163,11 @@ const translations = {
   },
   en: {
     langLabel: 'EN',
+    seo: {
+      title: 'Pizzeria Da Luigi Regensburg – Authentic Italian Pizza & Pasta',
+      description:
+        'Handmade pizza from the 480° wood-fired oven, fresh pasta, and Italian classics in Regensburg. Landshutterstr 33, 93053 Regensburg. Order online now!',
+    },
     nav: { home: 'Home', menu: 'Menu', order: 'Order', about: 'About', gallery: 'Gallery', contact: 'Contact' },
     hero: {
       slides: [
@@ -182,12 +182,6 @@ const translations = {
           title: 'A little spicy. Very unforgettable.',
           copy: 'Our Diavola brings the fire with Calabrian chili, fennel salami, and charred edges.',
           cta: 'See the gallery',
-        },
-        {
-          eyebrow: 'THE OLD WAY IS THE BEST WAY',
-          title: 'Wood fire. Big heart.',
-          copy: 'Every pizza meets a 480° oven, because shortcuts have no place at our table.',
-          cta: 'Meet the family',
         },
       ],
       sideText: 'BENVENUTI A TAVOLA',
@@ -247,20 +241,17 @@ const translations = {
       eyebrow: 'Come say ciao',
       heading1: 'Pull up',
       heading2: 'a chair.',
+      addressLabel: 'Address',
       address1: 'Landshutterstr 33',
       address2: '93053 Regensburg',
+      phoneLabel: 'Phone',
       phone: '0941 56995899',
+      emailLabel: 'Email',
+      email: 'ciao@dalugui.pizza',
+      hoursLabel: 'Opening hours',
       hours1: 'Tue-Sun · 11:30am-11pm',
       hours2: 'Closed Mondays (even Luigi rests)',
-      formHeadingIdle: 'Save me a seat.',
-      formHeadingSent: 'Grazie mille!',
-      sentMessage: "Your table request is on its way. We'll call you back shortly.",
-      formIntro: "For groups of 8 or more, give us a call. Otherwise, send a note and we'll get you sorted.",
-      nameLabel: 'Name',
-      emailLabel: 'Email',
-      helpLabel: 'How can we help?',
-      helpPlaceholder: 'A table for six, please...',
-      send: 'Send it over',
+      orderCta: 'Order now',
     },
     footer: {
       tagline: 'Made with love, fire & lots of flour.',
@@ -293,7 +284,6 @@ function App() {
   const [lang, setLangState] = useState(() => localStorage.getItem('luigi-lang') || 'de')
   const [slide, setSlide] = useState(0)
   const [mobileNav, setMobileNav] = useState(false)
-  const [sent, setSent] = useState(false)
   const [galleryTab, setGalleryTab] = useState('all')
   const [galleryVisible, setGalleryVisible] = useState(GALLERY_PAGE_SIZE)
 
@@ -310,6 +300,24 @@ function App() {
   useEffect(() => {
     setGalleryVisible(GALLERY_PAGE_SIZE)
   }, [galleryTab])
+
+  useEffect(() => {
+    const seo = translations[lang].seo
+    document.documentElement.lang = lang
+    document.title = seo.title
+
+    const setMeta = (selector, content) => {
+      const el = document.querySelector(selector)
+      if (el) el.setAttribute('content', content)
+    }
+    setMeta('meta[name="description"]', seo.description)
+    setMeta('meta[property="og:title"]', seo.title)
+    setMeta('meta[property="og:description"]', seo.description)
+    setMeta('meta[property="og:locale"]', lang === 'de' ? 'de_DE' : 'en_US')
+    setMeta('meta[property="og:locale:alternate"]', lang === 'de' ? 'en_US' : 'de_DE')
+    setMeta('meta[name="twitter:title"]', seo.title)
+    setMeta('meta[name="twitter:description"]', seo.description)
+  }, [lang])
 
   const t = translations[lang]
   const activeSlide = t.hero.slides[slide]
@@ -399,7 +407,11 @@ function App() {
         <section className="relative flex min-h-[100dvh] items-center overflow-hidden bg-[#173b28] pt-[76px] text-white">
           {heroImages.map((image, i) => (
             <div key={image} className={`absolute inset-0 transition-opacity duration-700 ${i === slide ? 'opacity-100' : 'opacity-0'}`}>
-              <img src={image} alt="" className="h-full w-full object-cover opacity-75" />
+              <img
+                src={image}
+                alt=""
+                className={`h-full w-full opacity-75 ${i === 0 ? 'object-cover object-top' : 'object-contain object-right'}`}
+              />
               <div className="absolute inset-0 bg-gradient-to-r from-[#102d1d]/90 via-[#173b28]/40 to-transparent" />
             </div>
           ))}
@@ -414,7 +426,9 @@ function App() {
               </h1>
               <p className="mt-5 max-w-lg text-base leading-relaxed text-[#fff8e9]/85 sm:mt-7 sm:text-lg">{activeSlide.copy}</p>
               <a
-                href="#gallery"
+                href={slide === 0 ? ORDER_URL : '#gallery'}
+                target={slide === 0 ? '_blank' : undefined}
+                rel={slide === 0 ? 'noreferrer' : undefined}
                 className="mt-6 inline-flex items-center gap-3 rounded-full bg-[#d73532] px-7 py-4 text-sm font-bold uppercase tracking-wider shadow-[5px_5px_0_#f6c453] transition-transform hover:-translate-y-1 sm:mt-8"
               >
                 {activeSlide.cta}
@@ -432,13 +446,13 @@ function App() {
               ))}
               <div className="ml-auto hidden items-center gap-2 sm:flex">
                 <button
-                  onClick={() => setSlide((slide + 2) % 3)}
+                  onClick={() => setSlide((slide + heroImages.length - 1) % heroImages.length)}
                   className="rounded-full border border-white/40 p-3 hover:bg-white/10"
                 >
                   <ChevronLeft size={18} />
                 </button>
                 <button
-                  onClick={() => setSlide((slide + 1) % 3)}
+                  onClick={() => setSlide((slide + 1) % heroImages.length)}
                   className="rounded-full border border-white/40 p-3 hover:bg-white/10"
                 >
                   <ChevronRight size={18} />
@@ -556,6 +570,16 @@ function App() {
                 )
               })}
             </div>
+            <div className="mt-14 flex justify-center">
+              <a
+                href={ORDER_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-3 rounded-full bg-[#d73532] px-7 py-4 text-sm font-bold uppercase tracking-widest text-white shadow-[4px_4px_0_#173b28] transition-transform hover:-translate-y-1"
+              >
+                {t.contact.orderCta} <ArrowRight size={16} />
+              </a>
+            </div>
           </div>
         </section>
 
@@ -596,91 +620,81 @@ function App() {
         </section>
 
         <section id="contact" className="bg-[#d73532] px-5 py-24 text-[#fff8e9] lg:px-10 lg:py-28">
-          <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[.8fr_1.2fr]">
-            <div>
-              <p className="mb-4 text-xs font-bold uppercase tracking-[.25em] text-[#f6c453]">{t.contact.eyebrow}</p>
-              <h2 className="font-oswald text-4xl font-bold uppercase leading-[.95] sm:text-6xl lg:text-8xl">
-                {t.contact.heading1}
-                <br />
-                {t.contact.heading2}
-              </h2>
-              <div className="mt-10 space-y-6 text-sm">
+          <div className="mx-auto max-w-7xl">
+            <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+              <div>
+                <p className="mb-4 text-xs font-bold uppercase tracking-[.25em] text-[#f6c453]">{t.contact.eyebrow}</p>
+                <h2 className="font-oswald text-4xl font-bold uppercase leading-[.95] sm:text-6xl lg:text-8xl">
+                  {t.contact.heading1}
+                  <br />
+                  {t.contact.heading2}
+                </h2>
+              </div>
+              <a
+                href={ORDER_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-3 rounded-full bg-[#f6c453] px-7 py-4 text-sm font-bold uppercase tracking-widest text-[#173b28] shadow-[4px_4px_0_#173b28] transition-transform hover:-translate-y-1"
+              >
+                {t.contact.orderCta} <ArrowRight size={16} />
+              </a>
+            </div>
+
+            <div className="mt-14 grid gap-5 lg:grid-cols-[.8fr_1.2fr]">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
                 <a
                   href="https://maps.google.com/?q=Landshutterstr+33,+93053+Regensburg"
                   target="_blank"
                   rel="noreferrer"
-                  className="flex gap-4 hover:text-[#f6c453]"
+                  className="flex items-start gap-4 bg-white/10 p-6 transition-colors hover:bg-white/15"
                 >
-                  <MapPin className="shrink-0 text-[#f6c453]" />
-                  {t.contact.address1}
-                  <br />
-                  {t.contact.address2}
+                  <MapPin className="mt-1 shrink-0 text-[#f6c453]" />
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-widest text-[#f6c453]">{t.contact.addressLabel}</p>
+                    <p className="mt-2 text-lg">
+                      {t.contact.address1}
+                      <br />
+                      {t.contact.address2}
+                    </p>
+                  </div>
                 </a>
-                <a href="tel:+4994156995899" className="flex gap-4 hover:text-[#f6c453]">
-                  <Phone className="shrink-0 text-[#f6c453]" />
-                  {t.contact.phone}
+                <a href="tel:+4994156995899" className="flex items-start gap-4 bg-white/10 p-6 transition-colors hover:bg-white/15">
+                  <Phone className="mt-1 shrink-0 text-[#f6c453]" />
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-widest text-[#f6c453]">{t.contact.phoneLabel}</p>
+                    <p className="mt-2 text-lg">{t.contact.phone}</p>
+                  </div>
                 </a>
-                <p className="flex gap-4">
-                  <Clock3 className="shrink-0 text-[#f6c453]" />
-                  {t.contact.hours1}
-                  <br />
-                  {t.contact.hours2}
-                </p>
+                <a href={`mailto:${t.contact.email}`} className="flex items-start gap-4 bg-white/10 p-6 transition-colors hover:bg-white/15">
+                  <Mail className="mt-1 shrink-0 text-[#f6c453]" />
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-widest text-[#f6c453]">{t.contact.emailLabel}</p>
+                    <p className="mt-2 text-lg">{t.contact.email}</p>
+                  </div>
+                </a>
+                <div className="flex items-start gap-4 bg-white/10 p-6">
+                  <Clock3 className="mt-1 shrink-0 text-[#f6c453]" />
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-widest text-[#f6c453]">{t.contact.hoursLabel}</p>
+                    <p className="mt-2 text-lg">
+                      {t.contact.hours1}
+                      <br />
+                      {t.contact.hours2}
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div className="mt-10 h-56 overflow-hidden border border-white/30">
+              <div className="min-h-[320px] overflow-hidden border border-white/30 lg:min-h-full">
                 <iframe
                   title="Pizzeria Da Luigi location"
                   className="h-full w-full"
+                  style={{ minHeight: 320 }}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   src="https://maps.google.com/maps?q=Landshutterstr%2033%2C%2093053%20Regensburg&t=&z=15&ie=UTF8&iwloc=&output=embed"
                 />
               </div>
             </div>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault()
-                setSent(true)
-              }}
-              className="bg-[#fbf5e8] p-7 text-[#173b28] sm:p-10"
-            >
-              <h3 className="font-oswald text-3xl font-bold uppercase sm:text-4xl">
-                {sent ? t.contact.formHeadingSent : t.contact.formHeadingIdle}
-              </h3>
-              {sent ? (
-                <div className="mt-6 border-l-4 border-[#f6c453] pl-4 text-lg">{t.contact.sentMessage}</div>
-              ) : (
-                <>
-                  <p className="mt-3 text-sm text-[#56705a]">{t.contact.formIntro}</p>
-                  <div className="mt-8 grid gap-5 sm:grid-cols-2">
-                    <label className="text-xs font-bold uppercase tracking-widest">
-                      {t.contact.nameLabel}
-                      <input required className="mt-2 w-full border-b-2 border-[#b9cbb9] bg-transparent py-3 outline-none focus:border-[#d73532]" />
-                    </label>
-                    <label className="text-xs font-bold uppercase tracking-widest">
-                      {t.contact.emailLabel}
-                      <input
-                        type="email"
-                        required
-                        className="mt-2 w-full border-b-2 border-[#b9cbb9] bg-transparent py-3 outline-none focus:border-[#d73532]"
-                      />
-                    </label>
-                  </div>
-                  <label className="mt-7 block text-xs font-bold uppercase tracking-widest">
-                    {t.contact.helpLabel}
-                    <textarea
-                      required
-                      rows={4}
-                      className="mt-2 w-full resize-none border-b-2 border-[#b9cbb9] bg-transparent py-3 outline-none focus:border-[#d73532]"
-                      placeholder={t.contact.helpPlaceholder}
-                    />
-                  </label>
-                  <button className="mt-8 inline-flex items-center gap-3 rounded-full bg-[#173b28] px-7 py-4 text-sm font-bold uppercase tracking-widest text-white shadow-[4px_4px_0_#f6c453]">
-                    {t.contact.send} <ArrowRight size={16} />
-                  </button>
-                </>
-              )}
-            </form>
           </div>
         </section>
       </main>
@@ -724,6 +738,14 @@ function App() {
             </a>
             <a aria-label="Email" href="mailto:ciao@dalugui.pizza" className="rounded-full border border-white/30 p-3 hover:border-[#f6c453]">
               <Mail size={17} />
+            </a>
+            <a
+              href={ORDER_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-full bg-[#d73532] px-5 py-3 text-xs font-bold uppercase tracking-widest text-white shadow-[3px_3px_0_#f6c453] transition-transform hover:-translate-y-0.5"
+            >
+              {t.contact.orderCta}
             </a>
           </div>
         </div>
