@@ -48,6 +48,7 @@ const galleryData = {
 const ORDER_URL = 'https://order.pizzeriadaluigiregensburg.de/'
 
 const heroImages = [hero1, hero2]
+const TESTIMONIAL_COUNT = 6
 
 const whyIcons = [Flame, Check, Truck, Star]
 
@@ -301,6 +302,7 @@ function App() {
   const [slide, setSlide] = useState(0)
   const [mobileNav, setMobileNav] = useState(false)
   const [galleryTab, setGalleryTab] = useState('all')
+  const [testiIndex, setTestiIndex] = useState(0)
 
   const setLang = (code) => {
     setLangState(code)
@@ -309,6 +311,11 @@ function App() {
 
   useEffect(() => {
     const timer = window.setInterval(() => setSlide((s) => (s + 1) % heroImages.length), 5200)
+    return () => window.clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setTestiIndex((i) => (i + 1) % TESTIMONIAL_COUNT), 6000)
     return () => window.clearInterval(timer)
   }, [])
 
@@ -413,7 +420,7 @@ function App() {
       </header>
 
       <main id="home">
-        <section className="relative flex min-h-[100dvh] items-center overflow-hidden bg-[#173b28] pt-[76px] text-white">
+        <section className="relative flex items-center overflow-hidden bg-[#173b28] pb-14 pt-[96px] text-white lg:pb-20 lg:pt-[110px]">
           {heroImages.map((image, i) => (
             <div key={image} className={`absolute inset-0 transition-opacity duration-700 ${i === slide ? 'opacity-100' : 'opacity-0'}`}>
               <img
@@ -424,7 +431,7 @@ function App() {
               <div className="absolute inset-0 bg-gradient-to-r from-[#102d1d]/90 via-[#173b28]/40 to-transparent" />
             </div>
           ))}
-          <div className="relative mx-auto w-full max-w-7xl px-5 py-10 lg:px-10 lg:py-14">
+          <div className="relative mx-auto w-full max-w-7xl px-5 lg:px-10">
             <div className="max-w-3xl">
               <p className="mb-4 flex items-center gap-3 text-xs font-bold tracking-[.28em] text-[#f6c453] sm:mb-5">
                 <span className="h-px w-10 bg-[#f6c453]" />
@@ -474,7 +481,7 @@ function App() {
           </div>
         </section>
 
-        <section id="about" className="bg-[#fbf5e8] px-5 py-24 lg:px-10 lg:py-32">
+        <section id="about" className="bg-[#fbf5e8] px-5 py-16 lg:px-10 lg:py-24">
           <div className="mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[.9fr_1.1fr] lg:gap-24">
             <div className="relative">
               <img
@@ -507,9 +514,9 @@ function App() {
           </div>
         </section>
 
-        <section id="gallery" className="bg-[#d73532] px-5 py-24 text-[#fff8e9] lg:px-10 lg:py-28">
+        <section id="gallery" className="bg-[#d73532] px-5 py-16 text-[#fff8e9] lg:px-10 lg:py-20">
           <div className="mx-auto max-w-7xl">
-            <div className="mb-12 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+            <div className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
               <div>
                 <p className="mb-4 text-xs font-bold uppercase tracking-[.25em] text-[#f6c453]">{t.gallery.eyebrow}</p>
                 <h2 className="font-oswald text-3xl font-bold uppercase leading-none sm:text-4xl lg:text-6xl">
@@ -564,9 +571,9 @@ function App() {
           </div>
         </section>
 
-        <section className="bg-[#f6c453] px-5 py-20 lg:px-10 lg:py-24">
+        <section className="bg-[#f6c453] px-5 py-14 lg:px-10 lg:py-16">
           <div className="mx-auto max-w-7xl">
-            <p className="mb-12 text-center font-oswald text-2xl font-bold uppercase text-[#173b28] sm:text-3xl lg:text-4xl">
+            <p className="mb-8 text-center font-oswald text-2xl font-bold uppercase text-[#173b28] sm:text-3xl lg:text-4xl">
               {t.why.heading1} <span className="text-[#d73532]">{t.why.heading2}</span>
             </p>
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
@@ -581,7 +588,7 @@ function App() {
                 )
               })}
             </div>
-            <div className="mt-14 flex justify-center">
+            <div className="mt-10 flex justify-center">
               <a
                 href={ORDER_URL}
                 target="_blank"
@@ -594,7 +601,7 @@ function App() {
           </div>
         </section>
 
-        <section className="bg-[#fbf5e8] px-5 py-24 lg:px-10 lg:py-32">
+        <section className="bg-[#fbf5e8] px-5 py-16 lg:px-10 lg:py-24">
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
               <div>
@@ -611,26 +618,55 @@ function App() {
                 ))}
               </div>
             </div>
-            <div className="mt-14 grid gap-5 md:grid-cols-3">
-              {t.testimonials.items.map(({ quote, name, role }) => (
-                <blockquote key={name} className="bg-white/70 p-7 shadow-sm">
-                  <div className="mb-5 flex gap-1 text-[#d73532]">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <Star key={i} size={14} fill="currentColor" />
-                    ))}
-                  </div>
-                  <p className="text-lg leading-relaxed text-[#36543b]">{quote}</p>
-                  <footer className="mt-7 border-t border-[#d8dfce] pt-4">
-                    <strong className="block text-sm">{name}</strong>
-                    <span className="text-xs uppercase tracking-widest text-[#879485]">{role}</span>
-                  </footer>
-                </blockquote>
-              ))}
+            <div className="relative mx-auto mt-10 max-w-2xl">
+              {(() => {
+                const { quote, name, role } = t.testimonials.items[testiIndex]
+                return (
+                  <blockquote key={name} className="bg-white/70 p-7 shadow-sm sm:p-10">
+                    <div className="mb-5 flex gap-1 text-[#d73532]">
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <Star key={i} size={14} fill="currentColor" />
+                      ))}
+                    </div>
+                    <p className="text-lg leading-relaxed text-[#36543b]">{quote}</p>
+                    <footer className="mt-7 border-t border-[#d8dfce] pt-4">
+                      <strong className="block text-sm">{name}</strong>
+                      <span className="text-xs uppercase tracking-widest text-[#879485]">{role}</span>
+                    </footer>
+                  </blockquote>
+                )
+              })()}
+              <div className="mt-6 flex items-center justify-center gap-4">
+                <button
+                  aria-label="Previous review"
+                  onClick={() => setTestiIndex((i) => (i + TESTIMONIAL_COUNT - 1) % TESTIMONIAL_COUNT)}
+                  className="rounded-full border border-[#173b28]/20 p-3 text-[#173b28] hover:bg-[#173b28]/5"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                <div className="flex items-center gap-2">
+                  {t.testimonials.items.map((_, i) => (
+                    <button
+                      key={i}
+                      aria-label={`Review ${i + 1}`}
+                      onClick={() => setTestiIndex(i)}
+                      className={`h-2 rounded-full transition-all ${i === testiIndex ? 'w-8 bg-[#d73532]' : 'w-2 bg-[#173b28]/20'}`}
+                    />
+                  ))}
+                </div>
+                <button
+                  aria-label="Next review"
+                  onClick={() => setTestiIndex((i) => (i + 1) % TESTIMONIAL_COUNT)}
+                  className="rounded-full border border-[#173b28]/20 p-3 text-[#173b28] hover:bg-[#173b28]/5"
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </div>
             </div>
           </div>
         </section>
 
-        <section id="contact" className="bg-[#d73532] px-5 py-24 text-[#fff8e9] lg:px-10 lg:py-28">
+        <section id="contact" className="bg-[#d73532] px-5 py-16 text-[#fff8e9] lg:px-10 lg:py-20">
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
               <div>
@@ -651,7 +687,7 @@ function App() {
               </a>
             </div>
 
-            <div className="mt-14 grid grid-cols-1 gap-5 lg:grid-cols-[.8fr_1.2fr]">
+            <div className="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-[.8fr_1.2fr]">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
                 <a
                   href="https://maps.google.com/?q=Landshutterstr+33,+93053+Regensburg"
