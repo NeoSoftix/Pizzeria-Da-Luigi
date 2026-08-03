@@ -1,4 +1,4 @@
-name: Deploy React
+name: Pizzeria Da Luigi
 
 on:
   push:
@@ -21,9 +21,12 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
 
           script: |
-            cd /home/ubuntu/project
+            cd /home/ubuntu/Pizzeria-Da-Luigi
             git pull origin main
+
+            cd frontend
             npm install
             npm run build
+
             sudo rm -rf /var/www/html/*
             sudo cp -r dist/* /var/www/html/
