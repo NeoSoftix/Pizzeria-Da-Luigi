@@ -55,7 +55,6 @@ const galleryData = {
   place: buildGalleryItems(placeGlob),
 }
 
-const GALLERY_PAGE_SIZE = 6
 const ORDER_URL = 'https://order.pizzeriadaluigiregensburg.de/'
 
 const heroImages = [hero1, hero2]
@@ -70,7 +69,7 @@ const translations = {
       description:
         'Handgemachte Pizza aus dem 480°-Holzofen, frische Pasta und italienische Klassiker in Regensburg. Landshutterstr 33, 93053 Regensburg. Jetzt online bestellen!',
     },
-    nav: { home: 'Start', menu: 'Speisekarte', order: 'Bestellung', about: 'Über uns', gallery: 'Galerie', contact: 'Kontakt' },
+    nav: { home: 'Start', menu: 'Speisekarte', about: 'Über uns', gallery: 'Galerie', contact: 'Kontakt' },
     hero: {
       slides: [
         {
@@ -102,7 +101,6 @@ const translations = {
       copy1: 'Große Aromen, bunte Teller und jede Menge Servietten. Markiere deinen Tisch',
       handle: '@dalugui.pizza',
       tabs: { all: 'Alle', food: 'Essen', place: 'Unser Lokal', pizza: 'Pizza' },
-      loadMore: 'Mehr laden',
     },
     why: {
       heading1: 'Warum Luigi?',
@@ -146,7 +144,7 @@ const translations = {
       phoneLabel: 'Telefon',
       phone: '0941 56995899',
       emailLabel: 'E-Mail',
-      email: 'ciao@dalugui.pizza',
+      email: 'pizzeriadaluigiregensburg@gmail.com',
       hoursLabel: 'Öffnungszeiten',
       hours1: 'Di–So · 11:30–23:00 Uhr',
       hours2: 'Montags geschlossen (auch Luigi ruht sich aus)',
@@ -166,7 +164,7 @@ const translations = {
       description:
         'Handmade pizza from the 480° wood-fired oven, fresh pasta, and Italian classics in Regensburg. Landshutterstr 33, 93053 Regensburg. Order online now!',
     },
-    nav: { home: 'Home', menu: 'Menu', order: 'Order', about: 'About', gallery: 'Gallery', contact: 'Contact' },
+    nav: { home: 'Home', menu: 'Menu', about: 'About', gallery: 'Gallery', contact: 'Contact' },
     hero: {
       slides: [
         {
@@ -198,7 +196,6 @@ const translations = {
       copy1: 'Big flavors, bright plates, and plenty of napkins. Tag your table',
       handle: '@dalugui.pizza',
       tabs: { all: 'All', food: 'Food', place: 'Our Place', pizza: 'Pizza' },
-      loadMore: 'Load more',
     },
     why: {
       heading1: 'Why Luigi?',
@@ -242,7 +239,7 @@ const translations = {
       phoneLabel: 'Phone',
       phone: '0941 56995899',
       emailLabel: 'Email',
-      email: 'ciao@dalugui.pizza',
+      email: 'pizzeriadaluigiregensburg@gmail.com',
       hoursLabel: 'Opening hours',
       hours1: 'Tue-Sun · 11:30am-11pm',
       hours2: 'Closed Mondays (even Luigi rests)',
@@ -280,7 +277,6 @@ function App() {
   const [slide, setSlide] = useState(0)
   const [mobileNav, setMobileNav] = useState(false)
   const [galleryTab, setGalleryTab] = useState('all')
-  const [galleryVisible, setGalleryVisible] = useState(GALLERY_PAGE_SIZE)
 
   const setLang = (code) => {
     setLangState(code)
@@ -291,10 +287,6 @@ function App() {
     const timer = window.setInterval(() => setSlide((s) => (s + 1) % heroImages.length), 5200)
     return () => window.clearInterval(timer)
   }, [])
-
-  useEffect(() => {
-    setGalleryVisible(GALLERY_PAGE_SIZE)
-  }, [galleryTab])
 
   useEffect(() => {
     const seo = translations[lang].seo
@@ -324,8 +316,6 @@ function App() {
           ...galleryData.pizza.map((src) => ({ src, category: 'pizza' })),
         ]
       : galleryData[galleryTab].map((src) => ({ src, category: galleryTab }))
-  const visibleGalleryItems = galleryItems.slice(0, galleryVisible)
-  const hasMoreGallery = galleryItems.length > galleryVisible
   const categoryCounters = {}
 
   const navItems = [
@@ -371,7 +361,7 @@ function App() {
               rel="noreferrer"
               className="hidden rounded-full bg-[#d73532] px-5 py-3 text-[11px] font-bold uppercase tracking-widest text-white shadow-[4px_4px_0_#f6c453] transition-transform hover:-translate-y-0.5 sm:block"
             >
-              {t.nav.order}
+              {t.contact.orderCta}
             </a>
             <button aria-label="Open menu" onClick={() => setMobileNav(!mobileNav)} className="xl:hidden">
               {mobileNav ? <X /> : <MenuIcon />}
@@ -525,28 +515,28 @@ function App() {
               ))}
             </div>
 
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-              {visibleGalleryItems.map(({ src, category }, i) => {
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
+              {galleryItems.map(({ src, category }) => {
                 categoryCounters[category] = (categoryCounters[category] || 0) + 1
                 const label = `${t.gallery.tabs[category]} ${categoryCounters[category]}`
                 return (
-                  <div key={src} className={`group relative overflow-hidden ${i % 5 === 1 || i % 5 === 4 ? 'aspect-[.82]' : 'aspect-square'}`}>
+                  <div key={src} className="group relative aspect-square overflow-hidden">
                     <img src={src} alt={label} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   </div>
                 )
               })}
             </div>
 
-            {hasMoreGallery && (
-              <div className="mt-10 flex justify-center">
-                <button
-                  onClick={() => setGalleryVisible((v) => v + GALLERY_PAGE_SIZE)}
-                  className="rounded-full border border-white/40 px-7 py-3.5 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:border-[#f6c453] hover:text-[#f6c453]"
-                >
-                  {t.gallery.loadMore}
-                </button>
-              </div>
-            )}
+            <div className="mt-10 flex justify-center">
+              <a
+                href={ORDER_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-3 rounded-full bg-[#f6c453] px-7 py-4 text-sm font-bold uppercase tracking-widest text-[#173b28] shadow-[4px_4px_0_#173b28] transition-transform hover:-translate-y-1"
+              >
+                {t.contact.orderCta} <ArrowRight size={16} />
+              </a>
+            </div>
           </div>
         </section>
 
@@ -711,6 +701,7 @@ function App() {
           </div>
           <div className="text-xs text-[#b9cbb9]">
             <a href="tel:+4994156995899" className="block hover:text-[#f6c453]">{t.contact.phone}</a>
+            <a href={`mailto:${t.contact.email}`} className="mt-2 block hover:text-[#f6c453]">{t.contact.email}</a>
             <a
               href="https://maps.google.com/?q=Landshutterstr+33,+93053+Regensburg"
               target="_blank"
@@ -733,7 +724,7 @@ function App() {
             <a aria-label="Facebook" href="#home" className="rounded-full border border-white/30 p-3 hover:border-[#f6c453]">
               <FacebookIcon width={17} height={17} />
             </a>
-            <a aria-label="Email" href="mailto:ciao@dalugui.pizza" className="rounded-full border border-white/30 p-3 hover:border-[#f6c453]">
+            <a aria-label="Email" href={`mailto:${t.contact.email}`} className="rounded-full border border-white/30 p-3 hover:border-[#f6c453]">
               <Mail size={17} />
             </a>
             <a
