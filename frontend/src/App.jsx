@@ -148,7 +148,7 @@ const translations = {
       hoursLabel: 'Öffnungszeiten',
       hours1: 'Di–So · 11:30–23:00 Uhr',
       hours2: 'Montags geschlossen (auch Luigi ruht sich aus)',
-      orderCta: 'Jetzt bestellen',
+      orderCta: 'Bestellung',
     },
     footer: {
       tagline: 'Mit Liebe, Feuer & jeder Menge Mehl gemacht.',
@@ -243,7 +243,7 @@ const translations = {
       hoursLabel: 'Opening hours',
       hours1: 'Tue-Sun · 11:30am-11pm',
       hours2: 'Closed Mondays (even Luigi rests)',
-      orderCta: 'Order now',
+      orderCta: 'Order',
     },
     footer: {
       tagline: 'Made with love, fire & lots of flour.',
