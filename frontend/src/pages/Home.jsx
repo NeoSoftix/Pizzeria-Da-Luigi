@@ -143,7 +143,7 @@ export function Home({ t }) {
             </a>
           </div>
 
-          <div className="mt-10 flex items-center gap-3 sm:mt-14">
+          <div className="mt-10 hidden items-center gap-3 sm:flex sm:mt-14">
             {heroImages.map((_, i) => (
               <button
                 key={i}

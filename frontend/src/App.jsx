@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 
+import { BackToTop } from './components/BackToTop'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
 import { translations } from './i18n'
@@ -56,6 +57,7 @@ function App() {
       </Routes>
 
       <Footer lang={lang} setLang={setLang} t={t} />
+      <BackToTop />
     </div>
   )
 }

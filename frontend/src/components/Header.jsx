@@ -72,7 +72,7 @@ export function Header({ lang, setLang, t, mobileNav, setMobileNav, scrolled }) 
             href={ORDER_URL}
             target="_blank"
             rel="noreferrer"
-            className="hidden rounded-full bg-[#d73532] px-4 py-2.5 text-[11px] font-bold uppercase tracking-widest text-white shadow-[3px_3px_0_#f6c453] transition-transform hover:-translate-y-0.5 sm:block"
+            className="block rounded-full bg-[#d73532] px-4 py-2.5 text-[11px] font-bold uppercase tracking-widest text-white shadow-[3px_3px_0_#f6c453] transition-transform hover:-translate-y-0.5"
           >
             {t.contact.orderCta}
           </a>
