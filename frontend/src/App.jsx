@@ -374,11 +374,20 @@ function App() {
   const [testiPage, setTestiPage] = useState(0)
   const [testiPerPage, setTestiPerPage] = useState(3)
   const testiRef = useRef(null)
+  const [scrolled, setScrolled] = useState(false)
 
   const setLang = (code) => {
     setLangState(code)
     localStorage.setItem('luigi-lang', code)
   }
+
+  // Header goes solid once the user scrolls past the hero
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   // Detect how many testimonials to show per page based on screen size
   useEffect(() => {
@@ -455,10 +464,16 @@ function App() {
     <div className="min-h-[100dvh] overflow-x-hidden bg-[#fbf5e8] text-[#193b27]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
 
       {/* ─── HEADER ─── */}
-      <header className="fixed z-50 w-full border-b border-white/20 bg-[#173b28]/95 text-[#fff8e9] backdrop-blur-md">
-        <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
+      <header
+        className={`fixed z-50 w-full transition-colors duration-300 ${
+          scrolled
+            ? 'border-b border-white/20 bg-[#173b28]/95 text-[#fff8e9] backdrop-blur-md'
+            : 'border-b border-transparent bg-transparent text-[#fff8e9]'
+        }`}
+      >
+        <div className="mx-auto flex h-[88px] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
           <a href="#home" className="flex items-center gap-3 shrink-0">
-            <img src={logo} alt="Pizzeria Da Luigi" className="h-10 w-10 sm:h-12 sm:w-12 rounded-full object-cover ring-2 ring-[#f6c453]" />
+            <img src={logo} alt="Pizzeria Da Luigi" className="h-14 w-14 sm:h-16 sm:w-16 rounded-full object-cover ring-2 ring-[#f6c453] shadow-lg" />
             <span className="font-oswald text-lg sm:text-xl font-bold uppercase tracking-tight leading-[.85]">
               Pizzeria
               <br />
@@ -530,15 +545,16 @@ function App() {
       <main id="home">
 
         {/* ─── HERO ─── */}
-        <section className="relative flex items-center overflow-hidden bg-[#173b28] pb-14 pt-[96px] text-white min-h-[520px] sm:min-h-[600px] lg:pb-20 lg:pt-[110px]">
+        <section className="relative flex items-center overflow-hidden bg-[#173b28] pb-14 pt-[112px] text-white min-h-[560px] sm:min-h-[640px] lg:pb-20 lg:pt-[128px]">
           {heroImages.map((image, i) => (
             <div key={image} className={`absolute inset-0 transition-opacity duration-700 ${i === slide ? 'opacity-100' : 'opacity-0'}`}>
               <img
                 src={image}
                 alt=""
-                className={`h-full w-full object-cover opacity-75 ${i === 0 ? 'object-top' : 'object-center'}`}
+                className={`h-full w-full object-cover ${i === 0 ? 'object-top' : 'object-center'}`}
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#102d1d]/90 via-[#173b28]/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/10 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
             </div>
           ))}
           <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10">
@@ -547,7 +563,7 @@ function App() {
                 <span className="h-px w-8 bg-[#f6c453]" />
                 {activeSlide.eyebrow}
               </p>
-              <h1 className="font-oswald text-4xl font-bold uppercase leading-[.95] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+              <h1 className="font-oswald text-4xl font-bold uppercase leading-[.95] tracking-tight [text-shadow:0_2px_16px_rgba(0,0,0,0.5)] sm:text-5xl md:text-6xl lg:text-7xl">
                 {activeSlide.title}
               </h1>
               <p className="mt-5 max-w-lg text-base leading-relaxed text-[#fff8e9]/85 sm:text-lg">{activeSlide.copy}</p>
