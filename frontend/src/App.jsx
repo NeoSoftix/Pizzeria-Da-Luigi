@@ -545,7 +545,7 @@ function App() {
       <main id="home">
 
         {/* ─── HERO ─── */}
-        <section className="relative flex items-center overflow-hidden bg-[#173b28] pb-14 pt-[112px] text-white min-h-[560px] sm:min-h-[640px] lg:pb-20 lg:pt-[128px]">
+        <section className="relative flex h-[560px] items-center overflow-hidden bg-[#173b28] pb-14 pt-[112px] text-white sm:h-[640px] lg:h-[700px] lg:pb-20 lg:pt-[128px]">
           {heroImages.map((image, i) => (
             <div key={image} className={`absolute inset-0 transition-opacity duration-700 ${i === slide ? 'opacity-100' : 'opacity-0'}`}>
               <img
