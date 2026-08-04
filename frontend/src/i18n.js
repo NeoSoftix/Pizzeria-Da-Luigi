@@ -74,7 +74,7 @@ export const translations = {
       heading1: 'Warum Luigi?',
       heading2: 'Ganz einfach.',
       items: [
-        { title: '480° Holzofen', copy: 'Schnelle, kräftige Hitze für die perfekte Kruste mit Leopardenmuster.' },
+        { title: 'Steinofen Pizza', copy: 'Schnelle, kräftige Hitze für die perfekte Kruste mit Leopardenmuster.' },
         { title: 'Marktfrisch', copy: 'Echte Zutaten, jeden Morgen ausgewählt von Menschen, die wir kennen.' },
         { title: 'Noch heiß', copy: 'Lokale Lieferung, die deine Pizza wie ein Meisterwerk behandelt.' },
         { title: 'Familienrezept', copy: 'Die Sauce ist von Nonna. Das Geheimnis? Verraten wir nicht.' },
@@ -291,7 +291,7 @@ export const translations = {
       heading1: 'Why Luigi?',
       heading2: 'Easy.',
       items: [
-        { title: '480° wood fire', copy: 'Fast, fierce heat for that perfect leopard-spotted crust.' },
+        { title: 'Stone Oven Pizza', copy: 'Fast, fierce heat for that perfect leopard-spotted crust.' },
         { title: 'Market fresh', copy: 'Real ingredients, chosen every morning from people we know.' },
         { title: 'Still hot', copy: 'Local delivery that treats your pizza like the masterpiece it is.' },
         { title: 'Family recipe', copy: "The sauce is Nonna's. The secret? We're not telling." },
